@@ -2,8 +2,6 @@
 
 > Application to help find a buddy to workout with based on location
 
-## Related Projects
-
 ## Table of Contents
 
 1. [Usage](#Usage)
