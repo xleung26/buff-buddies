@@ -35,10 +35,9 @@ npm install express
 npm install nodemon
 npm install @babel/core
 npm install @babel/preset-env
-npm install @babel/preset-react
+npm install babel-preset-react-native
 npm install babel-loader
-npm install react
-npm install react-dom
+npm install react-native
 npm install webpack
 npm install webpack-cli
 ```
