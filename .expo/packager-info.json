@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 7039,
+  "expoServerNgrokUrl": "https://v9-nab.anonymous.buff-buddies.exp.direct",
+  "packagerNgrokUrl": "https://packager.v9-nab.anonymous.buff-buddies.exp.direct",
+  "ngrokPid": 7050,
   "webpackServerPort": null
 }
