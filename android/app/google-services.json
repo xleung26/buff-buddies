@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "580897267631",
+    "firebase_url": "https://buff-buddies-5c788.firebaseio.com",
+    "project_id": "buff-buddies-5c788",
+    "storage_bucket": "buff-buddies-5c788.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580897267631:android:4bdbdc66c666efb1",
+        "android_client_info": {
+          "package_name": "com.weightingforyou.buffbuddies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580897267631-ttb0ds4s6b443vrfnsuo0ij8apm5fnr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvX8uyzM_ByfWMRE6MdA9v6-FWMM8OldY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+// {
+//   "project_info": {
+//     "project_id": "exponent-5dd6d",
+//     "project_number": "367315174693",
+//     "name": "Exponent Play Services"
+//   },
+//   "client": [
+//     {
+//       "client_info": {
+//         "mobilesdk_app_id": "1:367315174693:android:f968efbb41d1fa7a",
+//         "client_id": "android:host.exp.exponent",
+//         "client_type": 1,
+//         "android_client_info": {
+//           "package_name": "com.weightingforyou.buffbuddies",
+//           "certificate_hash": ""
+//         }
+//       },
+//       "oauth_client": [],
+//       "api_key": [
+//         {
+//           "current_key": ""
+//         }
+//       ],
+//       "services": {
+//         "analytics_service": {
+//           "status": 2,
+//           "analytics_property": {
+//             "tracking_id": "UA-76673608-1"
+//           }
+//         },
+//         "cloud_messaging_service": {
+//           "status": 2,
+//           "apns_config": []
+//         },
+//         "appinvite_service": {
+//           "status": 1,
+//           "other_platform_oauth_client": []
+//         },
+//         "google_signin_service": {
+//           "status": 1
+//         },
+//         "ads_service": {
+//           "status": 1
+//         }
+//       }
+//     }
+//   ],
+//   "client_info": [],
+//   "ARTIFACT_VERSION": "1"
+// }

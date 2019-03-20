@@ -1,9 +1,10 @@
 {
-  "devToolsPort": 19003,
-  "expoServerPort": 19004,
-  "packagerPort": 19005,
-  "packagerPid": 5260,
-  "expoServerNgrokUrl": "https://yk-duf.anonymous.buff-buddies.exp.direct",
-  "packagerNgrokUrl": "https://packager.yk-duf.anonymous.buff-buddies.exp.direct",
-  "ngrokPid": 5276
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 21179,
+  "expoServerNgrokUrl": "https://48-629.anomali007.buff-buddies.exp.direct",
+  "packagerNgrokUrl": "https://packager.48-629.anomali007.buff-buddies.exp.direct",
+  "ngrokPid": 21200,
+  "webpackServerPort": null
 }
