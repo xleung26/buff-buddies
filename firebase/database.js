@@ -13,3 +13,5 @@ const listen = (userId) => {
   });
 };
 
+listen(1);
+storeValue(1, 'hello');
