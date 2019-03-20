@@ -5,7 +5,8 @@ buildscript {
   }
 
   dependencies {
-    classpath 'io.fabric.tools:gradle:1.26.1'
+    // classpath 'io.fabric.tools:gradle:1.26.1'
+    classpath 'com.google.gms:google-services:4.0.1'
   }
 }
 apply plugin: 'com.android.application'
@@ -104,12 +105,17 @@ apply from: 'expo.gradle'
 // WHEN_PREPARING_SHELL_REMOVE_TO_HERE
 
 dependencies {
+    implementation project(':react-native-firebase')
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation 'com.android.support:multidex:1.0.1'
 
   // Our dependencies
   implementation 'com.android.support:appcompat-v7:27.1.1'
+
+  // Firebase dependencies
+  implementation "com.google.android.gms:play-services-base:16.0.1"
+  implementation "com.google.firebase:firebase-core:16.0.6"
 
   // Our dependencies from ExpoView
   // DON'T ADD ANYTHING HERE THAT ISN'T IN EXPOVIEW. ONLY COPY THINGS FROM EXPOVIEW TO HERE.
