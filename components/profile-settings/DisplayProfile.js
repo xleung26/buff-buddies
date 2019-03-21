@@ -1,5 +1,12 @@
 import React from "react";
-import { SectionList, Image, StyleSheet, Text, View } from "react-native";
+import {
+  SectionList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView
+} from "react-native";
 import {
   addToDatabase,
   updateDatabase,
@@ -24,20 +31,35 @@ export default class DisplayProfile extends React.Component {
 
   componentDidMount() {
     getFromDatabase("aqilthanawala").then(snapshot => {
-      console.log(snapshot);
+      let test = snapshot.val();
+      let { aboutMe, activities, gym, hours, image, location, name } = test;
+      this.setState({ aboutMe, activities, gym, hours, image, location, name });
     });
   }
 
   render() {
     return (
-      <View>
+      <ScrollView>
         <Avatar
           rounded
           source={{
             uri: "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg"
           }}
         />
-      </View>
+        <Text>
+          Name: {this.state.name.first}
+          {this.state.name.last} {"\n"}
+          Favorite Gym Activities:{" "}
+          {this.state.activities.map((activity, i) => {
+            if (i === this.state.activities.length - 1) {
+              return <Text key={i}> {activity}</Text>;
+            }
+            return <Text key={i}> {activity},</Text>;
+          })}{" "}
+          {"\n"}
+          Gym Membership: {this.state.gym} {"\n"}
+        </Text>
+      </ScrollView>
     );
   }
 }
