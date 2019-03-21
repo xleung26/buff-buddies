@@ -24,7 +24,7 @@ export default class ChatRoom extends Component {
     }
 
     handleSubmit () {
-        let messId = this.state.messages.length + 1;
+        let messId = this.state.messages.length;
         db.messagesStore(this.props.id, messId, this.props.currentUser, this.state.text)
     }
 
@@ -47,7 +47,17 @@ export default class ChatRoom extends Component {
                 onPress = {this.handleSubmit}
                 title = {`submit`}
                 />
-            </View> : <Text></Text>
+            </View> : 
+            <View>
+                <TextInput 
+                placeholder = 'Type here'
+                onChangeText = {(text) => this.setState({text})}
+                />
+                <Button 
+                onPress = {this.handleSubmit}
+                title = {`submit`}
+                />
+            </View>
         )
     }
 }
