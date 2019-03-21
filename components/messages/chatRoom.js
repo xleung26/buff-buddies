@@ -25,39 +25,34 @@ export default class ChatRoom extends Component {
 
     handleSubmit () {
         let messId = this.state.messages.length;
-        db.messagesStore(this.props.id, messId, this.props.currentUser, this.state.text)
+        if (this.state.text !== ''){
+            db.messagesStore(this.props.id, messId, this.props.currentUser, this.state.text)
+        }
+        this.textInput.clear()
     }
 
     render () {
 
         return (
-        this.state.messages.length !== 0 ?
             <View>
                 <Button
                 onPress = {() => this.props.changeChatRoom(null)} 
                 title = {`back`}
                 >
                 </Button>
-                {this.state.messages.map((item, index) => {return <Text key={index} >{`${item.userName}: ${item.message}`}</Text>})}
+                {this.state.messages.length !== 0 ?
+                this.state.messages.map((item, index) => {return <Text key={index} >{`${item.userName}: ${item.message}`}</Text>}): <View></View>
+                }
                 <TextInput 
                 placeholder = 'Type here'
                 onChangeText = {(text) => this.setState({text})}
+                ref={input => { this.textInput = input}}
                 />
                 <Button 
                 onPress = {this.handleSubmit}
                 title = {`submit`}
                 />
-            </View> : 
-            <View>
-                <TextInput 
-                placeholder = 'Type here'
-                onChangeText = {(text) => this.setState({text})}
-                />
-                <Button 
-                onPress = {this.handleSubmit}
-                title = {`submit`}
-                />
-            </View>
+            </View> 
         )
     }
 }

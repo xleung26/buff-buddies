@@ -15,22 +15,44 @@ const fetchChatRooms = (userName, callback) => {
   })
 }
 
-const chatStore = (value) => {
-    
-  
-  db.ref(`chat/${chatId}`).set({
-    title: value
+// just invoke this one function ------------------------------->
+const chatStore = (userName1, userName2) => {
+  db.ref(`chat/`).once('value', async (snapshot) => {
+    let val = snapshot.val();
+    if (val === null){
+      await db.ref(`chat/`).set({count: 0})
+      memberStore(userName1, userName2);
+      storeUserChat(userName1);
+      storeUserChat(userName2);
+    } else {
+      await db.ref(`chat/`).set({count: val.count + 1})
+      memberStore(userName1, userName2);
+      storeUserChat(userName1);
+      storeUserChat(userName2);
+    }
+  }) 
+}
+
+// ------------------------------------------------------------->
+
+const chatIdGen = (callback) => {
+  db.ref(`chat/`).on('value', (snapshot) => {
+    let val = snapshot.val().count;
+    callback(val);
   })
 }
 
-
-const storeUserChat = (userName, chatId) => {
-  db.ref(`user/${userName}/chat`).push(chatId)
+const storeUserChat = (userName) => {
+  chatIdGen((id) => {
+    db.ref(`user/${userName}/chat`).push(id)
+  })
 }
 
-const memberStore = (chatId, mem1, mem2) => {
-  db.ref(`member/${chatId}/${mem1}`).set(true);
-  db.ref(`member/${chatId}/${mem2}`).set(true);
+const memberStore = (userName1, userName2) => {
+  chatIdGen((id) => {
+    db.ref(`member/${id}/${userName1}`).set(true);
+    db.ref(`member/${id}/${userName2}`).set(true);
+  })
 }
 
 const fetchMembers = (arr, userName, callback) => {
@@ -87,5 +109,7 @@ const fetchMessages = (chatId, callback) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
+// chatStore(`jkelly`, `usainbolt`)
 
-module.exports = { chatStore, storeUserChat, memberStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
+
+module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
