@@ -1,12 +1,13 @@
-import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import React from "react";
+import { ExpoConfigView } from "@expo/samples";
+import DisplayProfile from "../components/profile-settings/DisplayProfile.js";
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Profile',
+    title: "Profile"
   };
 
   render() {
-    return <ExpoConfigView />;
+    return <DisplayProfile />;
   }
 }
