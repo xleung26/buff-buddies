@@ -54,7 +54,7 @@ ProfileStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  MessagesStack,
   HomeStack,
+  MessagesStack,
   ProfileStack,
 });
