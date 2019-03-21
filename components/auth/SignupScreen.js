@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
+import emailSignup from './authHelpers.js';
+
 export default class SignupScreen extends Component {
   static navigationOptions = {
     title: 'Signup NOW!',
   };
-  state = { email: '', password: '', errorMessage: null }
+  state = {
+    email: '',
+    password: '',
+    errorMessage: null
+  }
+
+
+  // Sign Up user 
+  _signUp = () => {
+    // Create user 
+    if (this.state.email !== null && this.state.email !== '' && this.state.password !== null && this.state.password !== '') {
+      this.props.navigation.navigate('Main');
+      // emailSignup(this.state.email, this.state.password);
+    } else {
+      // Alert user that they are missing a email or password
+    }
+    // Sign 
+    // await AsyncStorage.clear();
+  };
 
   render() {
     return (
@@ -46,13 +66,6 @@ export default class SignupScreen extends Component {
       </View>
     );
   }
-  _signUp = () => {
-    // Create user 
-
-    // Sign 
-    // await AsyncStorage.clear();
-    this.props.navigation.navigate('Main');
-  };
 }
 
 // Styling
