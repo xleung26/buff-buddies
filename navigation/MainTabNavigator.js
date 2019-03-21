@@ -7,6 +7,20 @@ import FindBuddyScreen from '../screens/FindBuddyScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+const MessagesStack = createStackNavigator({
+  Messages: MessagesScreen,
+});
+
+MessagesStack.navigationOptions = {
+  tabBarLabel: 'Messages',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+    />
+  ),
+};
+
 const HomeStack = createStackNavigator({
   Home: FindBuddyScreen,
 });
@@ -25,19 +39,7 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const MessagesStack = createStackNavigator({
-  Messages: MessagesScreen,
-});
 
-MessagesStack.navigationOptions = {
-  tabBarLabel: 'Messages',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
 
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
@@ -54,7 +56,8 @@ ProfileStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  MessagesStack,
-  HomeStack,
   ProfileStack,
+  HomeStack,
+  MessagesStack,
+  
 });
