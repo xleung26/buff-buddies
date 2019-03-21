@@ -2,15 +2,6 @@ const { db } = require('./firebase.js');
 const Promise = require('bluebird')
 
 // might not need this helper function
-const chatStore = (chatId, value) => {
-  db.ref(`chat/${chatId}`).set({
-    title: value
-  })
-  db.ref(`chat/${chatId}`).once('value', (snapshot) => {
-    let val = snapshot.val().title;
-    console.log('new value', val);
-  })
-}
 
 const fetchChatRooms = (userName, callback) => {
   let arr = [];
@@ -23,6 +14,15 @@ const fetchChatRooms = (userName, callback) => {
     callback(arr);
   })
 }
+
+const chatStore = (value) => {
+    
+  
+  db.ref(`chat/${chatId}`).set({
+    title: value
+  })
+}
+
 
 const storeUserChat = (userName, chatId) => {
   db.ref(`user/${userName}/chat`).push(chatId)
@@ -54,10 +54,10 @@ const fetchMembers = (arr, userName, callback) => {
 
 const messagesStore = (chatId, messageId, userName, message) => {
   let time = new Date()
-  db.ref(`messages/${chatId}/m${messageId}`).set({
+  db.ref(`messages/${chatId}/${messageId}m`).set({
       userName: userName,
       message: message,
-      timeStamp: time.toUTCString().slice(5)
+      timeStamp: time.toUTCString().slice(4).trim()
   })
 
   // db.ref(`messages/${chatId}/m${messageId}`).on('value', (snapshot) => {
@@ -71,10 +71,10 @@ const fetchMessages = (chatId, callback) => {
     let results = []
     let val = snapshot.val();
     for (let key in val){
-      results.push(val[key])
+      results[parseInt(key)] = val[key];
     }
     callback(results);
-  })
+  }) 
 }
 
 // chatStore(1, 'Mal & Justin');
