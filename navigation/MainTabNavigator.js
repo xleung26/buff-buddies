@@ -9,7 +9,6 @@ import {
 import TabBarIcon from "../components/TabBarIcon";
 import FindBuddyScreen from "../screens/FindBuddyScreen";
 import MessagesScreen from "../screens/MessagesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import DisplayProfile from "../components/profile-settings/DisplayProfile.js";
 import EditPage from "../components/profile-settings/EditPage.js";
 
@@ -45,11 +44,17 @@ HomeStack.navigationOptions = {
   )
 };
 
-const ProfileStack = createStackNavigator({
-  Profile: {
-    screen: DisplayProfile
-  }
-});
+const ProfileStack = createStackNavigator(
+  {
+    DisplayProfile: {
+      screen: DisplayProfile
+    },
+    EditPage: {
+      screen: EditPage
+    }
+  },
+  { initialRouteName: "DisplayProfile" }
+);
 
 ProfileStack.navigationOptions = {
   tabBarLabel: "Your Profile",

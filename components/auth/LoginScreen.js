@@ -21,18 +21,19 @@ export default class LoginScreen extends Component {
     // Navigate to main function call passing user or setting user in config
     // On login failure
     // Trigger alert and ask to create account or try again
-    if (
-      this.state.email !== null &&
-      this.state.email !== "" &&
-      this.state.password !== null &&
-      this.state.password !== ""
-    ) {
-      this.props.navigation.navigate("Main");
-      // emailLogin(this.state.email, this.state.password);
-    } else {
-      // Alert user that they are missing a email or password
-    }
+    // if (
+    //   this.state.email !== null &&
+    //   this.state.email !== "" &&
+    //   this.state.password !== null &&
+    //   this.state.password !== ""
+    // ) {
+    this.props.navigation.navigate("Main");
+    // emailLogin(this.state.email, this.state.password);
   };
+  //    else {
+  //     // Alert user that they are missing a email or password
+  //   }
+  // };
   // This method will push the 'signup' view onto the stack
   _navigateToSignUp = () => {
     this.props.navigation.navigate("Signup", {});

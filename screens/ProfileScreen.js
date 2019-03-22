@@ -6,14 +6,7 @@ import EditPage from "../components/profile-settings/EditPage.js";
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: "Profile",
-    headerRight: (
-      <Button
-        title="Edit"
-        color="#242424"
-        onPress={() => this.props.navigation.navigate("Edit")}
-      />
-    )
+    title: "Profile"
   };
   render() {
     return <DisplayProfile />;
