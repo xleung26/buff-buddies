@@ -10,7 +10,7 @@ const { db } = require("../../firebase/firebase.js");
 //     }
 //     data = JSON.parse(data.toString());
 //     // console.log(data, data.userName);
-//     addToDatabase(data, "jkelly");
+//     addToDatabase(data, "gabypernama");
 //   }
 // );
 
@@ -41,7 +41,7 @@ const getFromDatabase = userName => {
   return db.ref(`user/${userName}`).once("value");
 };
 
-// getFromDatabase("justinchoi");
+// addToDatabase("gabypernama", );
 
 module.exports = {
   addToDatabase,
