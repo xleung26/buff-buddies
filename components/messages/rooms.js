@@ -53,7 +53,7 @@ export default class Rooms extends Component {
                 ): <Text></Text>}
             </View>:
             <ChatRoom
-            id = {this.state.chatRoomId}
+            partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
             messages = {this.state.messages}
             chatRoom = {this.state.chatRoomId}
             changeChatRoom = {this.changeChatRoom}
