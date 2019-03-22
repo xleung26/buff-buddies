@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Button, TextInput} from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 import db from '../../firebase/chatDB.js';
 
 export default class ChatRoom extends Component {
@@ -24,30 +24,65 @@ export default class ChatRoom extends Component {
     }
 
     handleSubmit () {
-        let messId = this.state.messages.length + 1;
-        db.messagesStore(this.props.id, messId, this.props.currentUser, this.state.text)
+        let messId = this.state.messages.length;
+        if (this.state.text !== ''){
+            db.messagesStore(this.props.id, messId, this.props.currentUser, this.state.text)
+        }
+        this.textInput.clear()
     }
 
     render () {
 
         return (
-        this.state.messages.length !== 0 ?
-            <View>
+            <View
+
+            >
                 <Button
                 onPress = {() => this.props.changeChatRoom(null)} 
                 title = {`back`}
                 >
                 </Button>
-                {this.state.messages.map((item, index) => {return <Text key={index} >{`${item.userName}: ${item.message}`}</Text>})}
-                <TextInput 
-                placeholder = 'Type here'
-                onChangeText = {(text) => this.setState({text})}
-                />
-                <Button 
-                onPress = {this.handleSubmit}
-                title = {`submit`}
-                />
-            </View> : <Text></Text>
+                {this.state.messages.length !== 0 ?
+                this.state.messages.map((item, index) => {return <View 
+                key={index} 
+                style = {[styles.message]} 
+                >
+                  <Text>{item.userName}</Text><Text>{`: `}</Text><Text>{item.message}</Text>
+                </View>}): <View></View>
+                }
+                <View
+                style = {[styles.submissionContainer]} 
+                >
+                    <TextInput 
+                    placeholder = 'Type here'
+                    onChangeText = {(text) => this.setState({text})}
+                    ref={input => { this.textInput = input}}
+                    />
+                    <Button 
+                    onPress = {this.handleSubmit}
+                    title = {`submit`}
+                    />
+                </View>
+            </View> 
         )
     }
 }
+
+const styles = StyleSheet.create({
+    bigContainer: {
+        display: 'flex',
+        flexDirection: 'column',        
+    },
+
+    message: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        flexDirection: 'row',
+    },
+
+    submissionContainer: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        flexDirection: 'row',
+    }
+})

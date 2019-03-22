@@ -88,4 +88,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 8
   }
+<<<<<<< HEAD
 });
+=======
+})
+>>>>>>> 7a87e23925e269dd438fef67368ddccda4fa6226

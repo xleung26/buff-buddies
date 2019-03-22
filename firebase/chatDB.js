@@ -1,17 +1,6 @@
 const { db } = require('./firebase.js');
 const Promise = require('bluebird')
 
-// might not need this helper function
-const chatStore = (chatId, value) => {
-  db.ref(`chat/${chatId}`).set({
-    title: value
-  })
-  db.ref(`chat/${chatId}`).once('value', (snapshot) => {
-    let val = snapshot.val().title;
-    console.log('new value', val);
-  })
-}
-
 const fetchChatRooms = (userName, callback) => {
   let arr = [];
   db.ref(`user/${userName}/chat`).on('value', (snapshot) => {
@@ -24,13 +13,44 @@ const fetchChatRooms = (userName, callback) => {
   })
 }
 
-const storeUserChat = (userName, chatId) => {
-  db.ref(`user/${userName}/chat`).push(chatId)
+// just invoke this one function ------------------------------->
+const chatStore = (userName1, userName2) => {
+  db.ref(`chat/`).once('value', async (snapshot) => {
+    let val = snapshot.val();
+    if (val === null){
+      await db.ref(`chat/`).set({count: 0})
+      memberStore(userName1, userName2);
+      storeUserChat(userName1);
+      storeUserChat(userName2);
+    } else {
+      await db.ref(`chat/`).set({count: val.count + 1})
+      memberStore(userName1, userName2);
+      storeUserChat(userName1);
+      storeUserChat(userName2);
+    }
+  }) 
 }
 
-const memberStore = (chatId, mem1, mem2) => {
-  db.ref(`member/${chatId}/${mem1}`).set(true);
-  db.ref(`member/${chatId}/${mem2}`).set(true);
+// ------------------------------------------------------------->
+
+const chatIdGen = (callback) => {
+  db.ref(`chat/`).on('value', (snapshot) => {
+    let val = snapshot.val().count;
+    callback(val);
+  })
+}
+
+const storeUserChat = (userName) => {
+  chatIdGen((id) => {
+    db.ref(`user/${userName}/chat`).push(id)
+  })
+}
+
+const memberStore = (userName1, userName2) => {
+  chatIdGen((id) => {
+    db.ref(`member/${id}/${userName1}`).set(true);
+    db.ref(`member/${id}/${userName2}`).set(true);
+  })
 }
 
 const fetchMembers = (arr, userName, callback) => {
@@ -54,16 +74,11 @@ const fetchMembers = (arr, userName, callback) => {
 
 const messagesStore = (chatId, messageId, userName, message) => {
   let time = new Date()
-  db.ref(`messages/${chatId}/m${messageId}`).set({
+  db.ref(`messages/${chatId}/${messageId}m`).set({
       userName: userName,
       message: message,
-      timeStamp: time.toUTCString().slice(5)
+      timeStamp: time.toUTCString().slice(4).trim()
   })
-
-  // db.ref(`messages/${chatId}/m${messageId}`).on('value', (snapshot) => {
-  //   let val = snapshot.val().message;
-  //   callback(val);
-  // })
 }
 
 const fetchMessages = (chatId, callback) => {
@@ -71,10 +86,10 @@ const fetchMessages = (chatId, callback) => {
     let results = []
     let val = snapshot.val();
     for (let key in val){
-      results.push(val[key])
+      results[parseInt(key)] = val[key];
     }
     callback(results);
-  })
+  }) 
 }
 
 // chatStore(1, 'Mal & Justin');
@@ -87,5 +102,7 @@ const fetchMessages = (chatId, callback) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
+// chatStore(`jkelly`, `usainbolt`)
 
-module.exports = { chatStore, storeUserChat, memberStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
+
+module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
