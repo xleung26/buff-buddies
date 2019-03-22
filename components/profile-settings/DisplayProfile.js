@@ -1,4 +1,5 @@
 import React from "react";
+import { chatStore } from '../../firebase/chatDB.js';
 import {
   SectionList,
   Image,
