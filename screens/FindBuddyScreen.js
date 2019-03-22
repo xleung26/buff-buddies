@@ -227,7 +227,7 @@ export default class FindBuddyScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={{fontSize: 20}}>
+          <Text style={{fontSize: 20, paddingTop: 10}}>
             SWIPE CARD TO FIND A BUDDY
           </Text>
         </View>
@@ -268,12 +268,12 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     height: 80,
-    marginBottom: 60,
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-end'
   },
   bottomContainer: {
-    height: 200
+    height: 40
   },
   innerContainer: {
     flex: 1,
@@ -283,8 +283,8 @@ const styles = StyleSheet.create({
   },
   userDetails: {
     position: 'relative',
-    marginTop: 20,
-    marginBottom: 20
+    marginTop: 5,
+    marginBottom: 5
   },
   animatedContainer: {
     borderColor: 'grey',
@@ -312,31 +312,32 @@ const styles = StyleSheet.create({
     opacity: .2
   },
   headerText: {
-    fontSize: 40,
+    fontSize: 30,
     marginTop: 5,
     marginBottom: 5,
     textAlign: 'center',
     fontWeight: 'bold'
   },
   profileText: {
-    marginTop: 10,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 10,
-    lineHeight: 19,
+    color: 'rgba(0,0,0,0.9)',
+    fontSize: 13,
+    lineHeight: 14,
     textAlign: 'left',
   },
   textLeft: {
     position: 'absolute',
     left: 30,
     bottom: 0,
-    fontSize: 50,
+    fontSize: 40,
+    fontWeight: 'bold',
     color: 'red'
   },
   textRight: {
     position: 'absolute',
     right: 30,
     bottom: 0,
-    fontSize: 50,
+    fontSize: 40,
+    fontWeight: 'bold',
     color: 'green'
   }
 });
