@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
-import emailLogin from './authHelpers.js';
+//import emailLogin from './authHelpers.js';
 
 export default class LoginScreen extends Component {
   static navigationOptions = {
