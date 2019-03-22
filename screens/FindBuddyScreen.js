@@ -9,47 +9,119 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
+import { chatStore } from '../firebase/chatDB.js';
+const currentUser = {
+  id: 'aqilthanawala',
+  name: {
+    first: 'Aqil',
+    last: 'Thanawala'
+  },
+  location: '90025',
+  activities: ['Running'],
+  hours: 'Afternoon',
+  gym: 'LA Fitness',
+}
+const matches = {
+  aqilthanawala: {
+  
+  },
+  jkelly: {
+    'aqilthanawala': true
+  }
+}
 const users = [
   { id: '1',
     image: 'http://www.availableideas.com/wp-content/uploads/2016/02/Dog-bites-canvas-shoes-iPhone-6-Wallpaper.jpg',
     name: {
-      first: 'Dog',
-      last: 'Alpha'
+      first: 'Joe',
+      last: 'Shoe'
     },
     location: '90025',
-    activities: ['Running', 'Fetch'],
+    activities: ['Running', 'Lifting'],
     hours: 'Afternoon',
-    aboutMe: 'Woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof',
-    gym: 'the park'
+    aboutMe: 'Woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof I like shoes',
+    gym: 'LA Fitness'
   },
   { id: '2',
-    image: 'https://iphonewalls.net/wp-content/uploads/2015/01/Cute%20Pug%20Dog%20Laughing%20iPhone%206%20Plus%20HD%20Wallpaper-320x480.jpg',
-    name: {
-      first: 'Dawg',
-      last: 'Beta'
-    },
-    location: '90025',
-    activities: ['Walking', 'Biting'],
-    hours: 'Afternoon',
-    aboutMe: 'I\'m a dog',
-    gym: 'beach'
-  },
-  { id: '3',
     image: 'http://www.ohlays.com/wallpapers/dog1.jpg',
     name: {
       first: 'Air',
       last: 'Bud'
     },
     location: '90025',
-    activities: ['Jumping', 'Basketball'],
+    activities: ['Running', 'Basketball'],
     hours: 'Afternoon',
     aboutMe: 'Bark bark',
-    gym: 'Staples Center'
+    gym: 'LA Fitness'
+  },
+  { id: 'jkelly',
+    image: 'https://wallpaperaccess.com/full/690074.jpg',
+    name: {
+      first: 'Jun',
+      last: 'Kelly'
+    },
+    location: '90025',
+    activities: ['Running', 'Swimming'],
+    hours: 'Afternoon',
+    aboutMe: 'What\'s up dawg. Just lookin for a chill workout pal.',
+    gym: 'LA Fitness'
+  },
+  { id: '4',
+    image: 'https://iphonewalls.net/wp-content/uploads/2015/01/Cute%20Pug%20Dog%20Laughing%20iPhone%206%20Plus%20HD%20Wallpaper-320x480.jpg',
+    name: {
+      first: 'John',
+      last: 'Chewer'
+    },
+    location: '90025',
+    activities: ['Lifting'],
+    hours: 'Afternoon',
+    aboutMe: 'I like shoes',
+    gym: 'LA Fitness'
+  },
+  { id: '5',
+    image: 'https://i.pinimg.com/originals/fd/48/0f/fd480f0e5e1ae24a584587f70664d4ac.jpg',
+    name: {
+      first: 'Greg',
+      last: 'Smith'
+    },
+    location: '90025',
+    activities: ['Running', 'Swimming'],
+    hours: 'Afternoon',
+    aboutMe: 'Hi I\'m Greg and I want to get swole',
+    gym: 'LA Fitness'
   },
 ];
+
+const storeAndCheckMatch = (currentUser, targetUser) => {
+  matches[currentUser][targetUser] = true;
+  if (matches[targetUser]) {
+    if (matches[targetUser][currentUser]) {
+      chatStore(currentUser, targetUser);
+      Alert.alert(
+      'Matched found!',
+        `${targetUser} wants to workout with you`,
+        [
+          {
+            text: 'Send a message', onPress: () => {
+              console.log('message:', targetUser, currentUser);
+            }
+          },
+          {
+            text: 'Keep searching', onPress: () => {
+              console.log('continue');
+            },
+            style: 'cancel'
+          }
+        ],
+        {cancelable: false},
+      );
+    }
+  }
+}
 
 export default class FindBuddyScreen extends React.Component {
   constructor() {
@@ -57,7 +129,8 @@ export default class FindBuddyScreen extends React.Component {
     
     this.position = new Animated.ValueXY();
     this.state = {
-      currentIndex: 0
+      currentIndex: 0,
+      targetUser: null
     };
   }
 
@@ -74,13 +147,16 @@ export default class FindBuddyScreen extends React.Component {
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 120) {
           Animated.spring(this.position, { toValue: { x: screen_width + 100, y: gestureState.dy } }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1].id
+}, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
           });
+          storeAndCheckMatch(currentUser.id, users[this.state.currentIndex].id);
         } else if (gestureState.dx < -120) {
           Animated.spring(this.position, { toValue: { x: - screen_width - 100, y: gestureState.dy } }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1].id
+ }, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
           });
@@ -88,6 +164,9 @@ export default class FindBuddyScreen extends React.Component {
           Animated.spring(this.position, { toValue: { x: 0, y: 0 }, friction: 4 }).start();
         }
       }
+    });
+    this.setState({
+      targetUser: users[0].id
     });
   }
 
@@ -112,7 +191,7 @@ export default class FindBuddyScreen extends React.Component {
             </Image>
 
             <View style={styles.userDetails}>
-              <Text style={styles.profileText}>
+              <Text style={[styles.profileText, {fontStyle: 'italic', marginBottom: 10}]}>
                 {item.aboutMe}
               </Text>
               <Text style={styles.profileText}>
@@ -123,10 +202,10 @@ export default class FindBuddyScreen extends React.Component {
                 return activity})}
               </Text>
               <Text style={styles.profileText}>
-                Preferred Time: {item.hours}s
+                Time of Day: {item.hours}
               </Text>
               <Text style={styles.profileText}>
-                Preferred Location: {item.gym}
+                Gym: {item.gym}
               </Text>
             </View>
 
@@ -135,7 +214,7 @@ export default class FindBuddyScreen extends React.Component {
       } else {
         return (
           <Animated.View 
-            key={item.id} style={[styles.animatedContainer, {padding: 0}]}>
+            key={item.id} style={[styles.animatedContainer, {padding: 0, borderWidth: 0}]}>
             <Image style={styles.blurredImage} source={{uri: item.image}} blurRadius={30}>
             </Image>
           </Animated.View>
@@ -148,11 +227,20 @@ export default class FindBuddyScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
+          <Text style={{fontSize: 20}}>
+            SWIPE CARD TO FIND A BUDDY
+          </Text>
         </View>
         <View style={styles.innerContainer}>
           {this.renderUsers()}
         </View>
         <View style={styles.bottomContainer}>
+            <Text style={styles.textLeft}>
+              {'\u2190'} NO
+            </Text>
+            <Text style={styles.textRight}>
+              YES {'\u2192'}
+            </Text>
         </View>
       </View>
     );
@@ -176,11 +264,13 @@ const screen_width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5DC',
+    backgroundColor: '#F0F8FF',
   },
   topContainer: {
     height: 80,
-    marginBottom: 100
+    marginBottom: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   bottomContainer: {
     height: 200
@@ -197,13 +287,13 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   animatedContainer: {
-    borderColor: '#FFF',
-    borderWidth: 2,
+    borderColor: 'grey',
+    borderWidth: 0.3,
     borderRadius: 20,
-    height: screen_height - 200,
+    height: screen_height - 250,
     width: screen_width - 50,
     backgroundColor: '#FFF',
-    padding: 10,
+    padding: 8,
     position: 'absolute',
     borderRadius: 20,
   },
@@ -212,25 +302,41 @@ const styles = StyleSheet.create({
     height: '50%',
     width: null,
     resizeMode: 'cover',
-    padding: 20,
-    borderRadius: 20
+    padding: 0,
+    borderRadius: 0
   },
   blurredImage: {
     flex: 1,
     resizeMode: 'cover',
-    borderRadius: 20
+    borderRadius: 20,
+    opacity: .2
   },
   headerText: {
-    fontSize: 30,
-    marginTop: 20,
-    marginBottom: 20,
-    textAlign: 'center'
+    fontSize: 40,
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   profileText: {
     marginTop: 10,
     color: 'rgba(0,0,0,0.4)',
     fontSize: 20,
     lineHeight: 19,
-    textAlign: 'center',
+    textAlign: 'left',
   },
+  textLeft: {
+    position: 'absolute',
+    left: 30,
+    bottom: 0,
+    fontSize: 50,
+    color: 'red'
+  },
+  textRight: {
+    position: 'absolute',
+    right: 30,
+    bottom: 0,
+    fontSize: 50,
+    color: 'green'
+  }
 });
