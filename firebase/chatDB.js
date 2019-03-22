@@ -1,8 +1,6 @@
 const { db } = require('./firebase.js');
 const Promise = require('bluebird')
 
-// might not need this helper function
-
 const fetchChatRooms = (userName, callback) => {
   let arr = [];
   db.ref(`user/${userName}/chat`).on('value', (snapshot) => {
@@ -81,11 +79,6 @@ const messagesStore = (chatId, messageId, userName, message) => {
       message: message,
       timeStamp: time.toUTCString().slice(4).trim()
   })
-
-  // db.ref(`messages/${chatId}/m${messageId}`).on('value', (snapshot) => {
-  //   let val = snapshot.val().message;
-  //   callback(val);
-  // })
 }
 
 const fetchMessages = (chatId, callback) => {
