@@ -15,7 +15,7 @@ import EditPage from "./EditPage.js";
 class DisplayProfile extends React.Component {
   state = {
     aboutMe: "Hi, i love deadlifts and spa dates",
-    activities: ["biking", "swimming", "fun stuff"],
+    activities: ["biking", "swimming", "`fun stuff"],
     gym: "25 Hr fitness",
     hours: "3am",
     image: "url",
@@ -40,7 +40,6 @@ class DisplayProfile extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props.navigation);
     getFromDatabase("aqilthanawala").then(snapshot => {
       let test = snapshot.val();
       let { aboutMe, activities, gym, hours, image, location, name } = test;
