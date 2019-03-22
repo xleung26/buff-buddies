@@ -147,7 +147,7 @@ export default class FindBuddyScreen extends React.Component {
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 120) {
           Animated.spring(this.position, { toValue: { x: screen_width + 100, y: gestureState.dy } }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1].id
+            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1] ? users[this.state.currentIndex + 1].id : null
 }, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
@@ -155,7 +155,7 @@ export default class FindBuddyScreen extends React.Component {
           storeAndCheckMatch(currentUser.id, users[this.state.currentIndex].id);
         } else if (gestureState.dx < -120) {
           Animated.spring(this.position, { toValue: { x: - screen_width - 100, y: gestureState.dy } }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1].id
+            this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1] ? users[this.state.currentIndex + 1].id: null
  }, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
