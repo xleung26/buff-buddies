@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import {
     View, 
     Text, 
@@ -8,6 +9,7 @@ import {
     Dimensions,
     ScrollView
 } from 'react-native';
+
 import db from '../../firebase/chatDB.js';
 
 export default class ChatRoom extends Component {

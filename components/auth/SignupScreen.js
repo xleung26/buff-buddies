@@ -1,29 +1,33 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 
 // import emailSignup from './authHelpers.js';
 
 export default class SignupScreen extends Component {
   static navigationOptions = {
-    title: 'Signup NOW!',
+    title: "Signup NOW!"
   };
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     errorMessage: null
-  }
+  };
 
-
-  // Sign Up user 
+  // Sign Up user
   _signUp = () => {
-    // Create user 
-    if (this.state.email !== null && this.state.email !== '' && this.state.password !== null && this.state.password !== '') {
-      this.props.navigation.navigate('Main');
+    // Create user
+    if (
+      this.state.email !== null &&
+      this.state.email !== "" &&
+      this.state.password !== null &&
+      this.state.password !== ""
+    ) {
+      this.props.navigation.navigate("Main");
       // emailSignup(this.state.email, this.state.password);
     } else {
       // Alert user that they are missing a email or password
     }
-    // Sign 
+    // Sign
     // await AsyncStorage.clear();
   };
 
@@ -31,12 +35,13 @@ export default class SignupScreen extends Component {
     return (
       <View
         style={{
-          flexDirection: 'column',
+          flexDirection: "column",
           height: 100,
-          padding: 20,
-        }}>
-        <View style={{ backgroundColor: 'blue', flex: 0.3 }} />
-        <View style={{ backgroundColor: 'red', flex: 0.5 }} />
+          padding: 20
+        }}
+      >
+        <View style={{ backgroundColor: "blue", flex: 0.3 }} />
+        <View style={{ backgroundColor: "red", flex: 0.5 }} />
 
         {/* {this.state.errorMessage &&
           <Text style={{ color: 'red' }}>
@@ -73,14 +78,14 @@ export default class SignupScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   textInput: {
     height: 40,
-    width: '90%',
-    borderColor: 'gray',
+    width: "90%",
+    borderColor: "gray",
     borderWidth: 1,
     marginTop: 8
   }
-})
+});
