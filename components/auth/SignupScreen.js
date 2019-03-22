@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 
-// import emailSignup from './authHelpers.js';
+import axios from 'axios';
 
 export default class SignupScreen extends Component {
   static navigationOptions = {
@@ -13,6 +13,10 @@ export default class SignupScreen extends Component {
     errorMessage: null
   };
 
+  // This method will push the 'Main' view onto the stack
+  _navigateToEdit = () => {
+    this.props.navigation.navigate("EditPage", {});
+  };
   // Sign Up user
   _signUp = () => {
     // Create user
@@ -22,13 +26,20 @@ export default class SignupScreen extends Component {
       this.state.password !== null &&
       this.state.password !== ""
     ) {
-      this.props.navigation.navigate("EditPage");
-      // emailSignup(this.state.email, this.state.password);
+      axios.post('https://us-central1-buff-buddies.cloudfunctions.net/auth/signup', {
+        email: this.state.email,
+        pass: this.state.password
+      })
+        .then((response) => {
+          this._navigateToEdit();
+        })
+        .catch((error) => {
+          alert(error);
+        });
     } else {
       // Alert user that they are missing a email or password
+      alert('You are missing either a valid email or password.')
     }
-    // Sign
-    // await AsyncStorage.clear();
   };
 
   render() {
@@ -89,3 +100,4 @@ const styles = StyleSheet.create({
     marginTop: 8
   }
 });
+
