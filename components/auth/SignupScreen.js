@@ -22,7 +22,7 @@ export default class SignupScreen extends Component {
       this.state.password !== null &&
       this.state.password !== ""
     ) {
-      this.props.navigation.navigate("Main");
+      this.props.navigation.navigate("EditPage");
       // emailSignup(this.state.email, this.state.password);
     } else {
       // Alert user that they are missing a email or password
