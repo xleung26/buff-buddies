@@ -1,58 +1,64 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import React from "react";
+import { Platform } from "react-native";
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  createSwitchNavigator
+} from "react-navigation";
 
-import TabBarIcon from '../components/TabBarIcon';
-import FindBuddyScreen from '../screens/FindBuddyScreen';
-import MessagesScreen from '../screens/MessagesScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import TabBarIcon from "../components/TabBarIcon";
+import FindBuddyScreen from "../screens/FindBuddyScreen";
+import MessagesScreen from "../screens/MessagesScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import DisplayProfile from "../components/profile-settings/DisplayProfile.js";
+import EditPage from "../components/profile-settings/EditPage.js";
 
 const MessagesStack = createStackNavigator({
-  Messages: MessagesScreen,
+  Messages: MessagesScreen
 });
 
 MessagesStack.navigationOptions = {
-  tabBarLabel: 'Messages',
+  tabBarLabel: "Messages",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
     />
-  ),
+  )
 };
 
 const HomeStack = createStackNavigator({
-  Home: FindBuddyScreen,
+  Home: FindBuddyScreen
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Find Buddy',
+  tabBarLabel: "Find Buddy",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
       }
     />
-  ),
+  )
 };
 
-
-
 const ProfileStack = createStackNavigator({
-  Profile: ProfileScreen,
+  Profile: {
+    screen: DisplayProfile
+  }
 });
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
+  tabBarLabel: "Your Profile",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
     />
-  ),
+  )
 };
 
 export default createBottomTabNavigator({
