@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   profileText: {
     marginTop: 10,
     color: 'rgba(0,0,0,0.4)',
-    fontSize: 20,
+    fontSize: 10,
     lineHeight: 19,
     textAlign: 'left',
   },
