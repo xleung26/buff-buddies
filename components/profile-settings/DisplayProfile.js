@@ -21,7 +21,7 @@ class DisplayProfile extends React.Component {
     hours: "3am",
     image: "url",
     location: "fine",
-    name: [{ first: "Jane", last: "Doe" }],
+    name: { first: "Jane", last: "Doe" },
     change: false
   };
 
@@ -54,54 +54,108 @@ class DisplayProfile extends React.Component {
     } else {
       return (
         <ScrollView>
-          <Avatar
-            rounded
-            source={{
-              uri:
-                "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg"
-            }}
-          />
-          <Text>
-            <Text>Name: </Text>{" "}
-            <Text>
-              {this.state.name.first} {this.state.name.last} {"\n"}
-              {"\n"}
+          <View style={styles.container}>
+            <Avatar
+              rounded
+              size="xlarge"
+              source={{
+                uri:
+                  "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg" //this will be this.state.url
+              }}
+            />
+            <Text style={styles.name}>
+              {this.state.name.first} {this.state.name.last}
             </Text>
-            <Text>Favorite Gym Activities: </Text>
-            <Text>
+          </View>
+          <View style={styles.activities}>
+            <Text style={styles.activitiesHeader}>{"\n"}Activities: </Text>
+            <Text style={styles.activitiesText}>
               {this.state.activities.map((activity, i) => {
                 if (i === this.state.activities.length - 1) {
                   return <Text key={i}> {activity}</Text>;
                 }
                 return <Text key={i}> {activity},</Text>;
-              })}{" "}
-              {"\n"}
-              {"\n"}
+              })}
             </Text>
-            <Text>Gym Membership: </Text>
-            <Text>
-              {this.state.gym} {"\n"}
-              {"\n"}
-            </Text>
-            <Text>Usual Workout Time: </Text>
-            <Text>
-              {this.state.hours}
-              {"\n"}
-              {"\n"}
-            </Text>
-            <Text>Location: </Text>
-            <Text>
-              {this.state.location}
-              {"\n"}
-              {"\n"}
-            </Text>
-            <Text>About Me: {"\n"}</Text>
-            <Text>{this.state.aboutMe}</Text>
-          </Text>
+          </View>
+          <View style={styles.activities}>
+            <Text style={styles.activitiesHeader}>Gym Membership: </Text>
+            <Text style={styles.activitiesText}>{this.state.gym}</Text>
+          </View>
+          <View style={styles.activities}>
+            <Text style={styles.activitiesHeader}>Usual Workout Time: </Text>
+            <Text style={styles.activitiesText}>{this.state.hours}</Text>
+          </View>
+          <View style={styles.activities}>
+            <Text style={styles.activitiesHeader}>Location: </Text>
+            <Text style={styles.activitiesText}>{this.state.location}</Text>
+          </View>
+          <View style={styles.activities}>
+            <Text style={styles.activitiesHeader}>About Me:</Text>
+            <Text style={styles.aboutMeText}>{this.state.aboutMe}</Text>
+          </View>
         </ScrollView>
       );
     }
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+    paddingTop: 15
+  },
+  activities: {
+    display: "flex",
+    flexDirection: "column"
+  },
+  activitiesHeader: {
+    paddingBottom: 5,
+    fontSize: 17,
+    alignSelf: "center",
+    paddingLeft: 15,
+    fontWeight: "bold"
+  },
+  activitiesText: {
+    fontSize: 17,
+    alignSelf: "center",
+    paddingBottom: 40
+  },
+  aboutMeText: {
+    fontSize: 17,
+    alignSelf: "center",
+    paddingRight: 20,
+    paddingLeft: 50,
+    borderWidth: 0.5,
+    borderRadius: 6,
+    borderColor: "#808080",
+    width: "75%",
+    height: "45%"
+  },
+  header: {
+    fontSize: 17,
+    alignSelf: "center",
+    paddingLeft: 15,
+    fontWeight: "bold"
+  },
+  name: {
+    fontSize: 20,
+    alignSelf: "center"
+  }
+});
+
 export default DisplayProfile;
+
+/*
+
+<Text>Location: {"\n"}</Text>
+<Text>
+  {this.state.location}
+  {"\n"}
+  {"\n"}
+</Text>
+
+*/
