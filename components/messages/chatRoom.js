@@ -82,6 +82,8 @@ export default class ChatRoom extends Component {
                 }
                 </ScrollView>
                 </View>
+                <Text
+                >{`\n\n\n`}</Text>
                 <View
                 style = {[styles.submissionContainer]} 
                 >
@@ -93,7 +95,7 @@ export default class ChatRoom extends Component {
                     />
                     <Button 
                     onPress = {this.handleSubmit}
-                    title = {`submit`}
+                    title = {`Send`}
                     style = {[styles.submit]}
                     />
                 </View>
@@ -139,13 +141,16 @@ const styles = StyleSheet.create({
     },
 
     messageContainer: {
-        height: '85%',
+        height: screen_height * .68,
         marginLeft: 5,
-        marginRight: 5
+        marginRight: 5,
+        overflow: 'hidden'
+
     },
 
     scroll: {
         overflow: 'hidden',
+        height: screen_height * .68,
     },
 
     userName: {
