@@ -7,7 +7,10 @@ import {
   Button,
   Text
 } from "react-native";
-import { addToDatabase } from "../profile-settings/changeDb.js";
+import {
+  addToDatabase,
+  getFromDatabase
+} from "../profile-settings/changeDb.js";
 
 export default class EditPage extends React.Component {
   state = {
@@ -17,14 +20,41 @@ export default class EditPage extends React.Component {
     hours: "",
     image: "",
     location: "",
-    name: []
+    first: "",
+    last: ""
   };
   static navigationOptions = {
     title: "Edit Page"
   };
 
   addTODatabase() {
-    return addToDatabase(this.state, "Coco123");
+    return addToDatabase(this.state, "gabypernama");
+  }
+
+  componentDidMount() {
+    getFromDatabase("gabypernama").then(snapshot => {
+      let data = snapshot.val();
+      let {
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      } = data;
+      this.setState({
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      });
+    });
   }
 
   render() {
@@ -34,61 +64,86 @@ export default class EditPage extends React.Component {
         <View style={styles.container}>
           <TextInput
             style={styles.shortBox}
+            value={`${this.state.first}`}
             placeholder="   First"
             placeholderTextColor="#808080"
-            onChangeText={first =>
-              this.setState({ name: first }, () => console.log(this.state.name))
-            }
+            onChangeText={first => {
+              this.setState({ first });
+            }}
           />
           <TextInput
             style={styles.shortBox}
+            value={`${this.state.last}`}
             placeholder="   Last"
             placeholderTextColor="#808080"
-            onChangeText={last =>
-              this.setState({ name: last }, () => console.log(this.state.name))
-            }
+            onChangeText={last => {
+              this.setState({ last });
+            }}
           />
         </View>
         <Text style={styles.text}>{"\n"}Activities You Enjoy: </Text>
         <View style={styles.container}>
           <TextInput
             style={styles.longBox}
+            value={`${this.state.activities}`}
             placeholder="   Biking, Running, etc.."
             placeholderTextColor="#808080"
+            onChangeText={activities =>
+              this.setState({ activities }, () =>
+                console.log(this.state.activities)
+              )
+            }
           />
         </View>
         <Text style={styles.text}>{"\n"}Gym: </Text>
         <View style={styles.container}>
           <TextInput
             style={styles.longBox}
+            value={`${this.state.gym}`}
             placeholder="   24 HR Fitness, City Sports, etc.."
             placeholderTextColor="#808080"
+            onChangeText={gym => {
+              this.setState({ gym }, () => console.log(this.state.gym));
+            }}
           />
         </View>
         <Text style={styles.text}>{"\n"}Location: </Text>
         <View style={styles.container}>
           <TextInput
             style={styles.longBox}
+            value={`${this.state.location}`}
             placeholder="   Los Angeles, San Francisco, etc.."
             placeholderTextColor="#808080"
+            onChangeText={location => {
+              this.setState({ location }, () =>
+                console.log(this.state.location)
+              );
+            }}
           />
         </View>
         <Text style={styles.text}>{"\n"}About Me: </Text>
         <View style={styles.container}>
           <TextInput
             style={styles.aboutMe}
-            placeholder="I love my deadlifts and squats, could use someone to help me get into cardio more"
+            value={`${this.state.aboutMe}`}
+            placeholder="ex. I love my deadlifts and squats, could use someone to help me get into cardio more"
             placeholderTextColor="#808080"
             numberOfLines={10}
             multiline={true}
+            onChangeText={aboutMe => {
+              this.setState({ aboutMe }, () => console.log(this.state));
+            }}
           />
         </View>
         <Button
           title="Save"
-          onPress={() =>
-            this.addTODatabase().then(
-              this.props.navigation.navigate("DisplayProfile")
-            )
+          onPress={
+            () =>
+              this.addTODatabase().then(
+                this.props.navigation.navigate("DisplayProfile")
+              )
+            // this.addTODatabase().then(
+            //   this.props.navigation.navigate("DisplayProfile")
           }
         />
       </ScrollView>
