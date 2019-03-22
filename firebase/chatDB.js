@@ -102,7 +102,7 @@ const fetchMessages = (chatId, callback) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
-// chatStore(`jkelly`, `usainbolt`)
+// chatStore(`usainbolt`, `Coco123`)
 
 
 module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
