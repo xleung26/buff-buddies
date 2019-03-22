@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 
-// import emailLogin from './authHelpers.js';
-
 export default class LoginScreen extends Component {
   static navigationOptions = {
     title: "Please Login"
@@ -116,3 +114,4 @@ const styles = StyleSheet.create({
     marginTop: 8
   }
 });
+
