@@ -1,5 +1,5 @@
 import React from "react";
-import { chatStore } from '../../firebase/chatDB.js';
+import { chatStore } from "../../firebase/chatDB.js";
 import {
   SectionList,
   Image,
@@ -41,7 +41,7 @@ class DisplayProfile extends React.Component {
   };
 
   componentDidMount() {
-    getFromDatabase("aqilthanawala").then(snapshot => {
+    getFromDatabase("usainbolt").then(snapshot => {
       let test = snapshot.val();
       let { aboutMe, activities, gym, hours, image, location, name } = test;
       this.setState({ aboutMe, activities, gym, hours, image, location, name });
