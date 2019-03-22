@@ -14,8 +14,8 @@ export default class SignupScreen extends Component {
   };
 
   // This method will push the 'Main' view onto the stack
-  _navigateToMain = () => {
-    this.props.navigation.navigate("Main", {});
+  _navigateToEdit = () => {
+    this.props.navigation.navigate("EditPage", {});
   };
   // Sign Up user
   _signUp = () => {
@@ -26,18 +26,16 @@ export default class SignupScreen extends Component {
       this.state.password !== null &&
       this.state.password !== ""
     ) {
-
       axios.post('https://us-central1-buff-buddies.cloudfunctions.net/auth/signup', {
         email: this.state.email,
         pass: this.state.password
       })
         .then((response) => {
-          this._navigateToMain();
+          this._navigateToEdit();
         })
         .catch((error) => {
           alert(error);
         });
-      // emailSignup(this.state.email, this.state.password);
     } else {
       // Alert user that they are missing a email or password
       alert('You are missing either a valid email or password.')
