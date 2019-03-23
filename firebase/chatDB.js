@@ -5,7 +5,6 @@ const fetchChatRooms = (userName, callback) => {
   let arr = [];
   db.ref(`user/${userName}/chat`).on('value', (snapshot) => {
     let temp = snapshot.val()
-    console.log(temp)
     for (let key in temp){
       arr.push(temp[key]);
     }
