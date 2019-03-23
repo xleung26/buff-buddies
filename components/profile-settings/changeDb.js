@@ -37,8 +37,8 @@ const deleteFromDatabase = userName => {
     .then(() => console.log("deleted successfully"));
 };
 
-const getFromDatabase = userName => {
-  return db.ref(`user/${userName}`).once("value");
+const getFromDatabase = (userName, callback) => {
+  return db.ref(`user/${userName}`).on("value", callback);
 };
 
 // addToDatabase("gabypernama", );

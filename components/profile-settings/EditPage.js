@@ -11,6 +11,9 @@ import {
   addToDatabase,
   getFromDatabase
 } from "../profile-settings/changeDb.js";
+import { storage } from "../../firebase/firebase.js";
+const storageRef = storage.ref();
+const imageRef = storageRef.child("images");
 
 export default class EditPage extends React.Component {
   constructor(props) {
@@ -26,35 +29,38 @@ export default class EditPage extends React.Component {
       last: ""
     };
     this.splitArr = this.splitArr.bind(this);
+    this.getCurrentChanges = this.getCurrentChanges.bind(this);
   }
   static navigationOptions = {
     title: "Edit Page"
   };
 
-  componentDidMount() {
-    getFromDatabase("gabypernama").then(snapshot => {
-      let data = snapshot.val();
-      let {
-        aboutMe,
-        activities,
-        gym,
-        hours,
-        image,
-        location,
-        first,
-        last
-      } = data;
-      this.setState({
-        aboutMe,
-        activities,
-        gym,
-        hours,
-        image,
-        location,
-        first,
-        last
-      });
+  getCurrentChanges(snapshot) {
+    let data = snapshot.val();
+    let {
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
+    } = data;
+    this.setState({
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
     });
+  }
+
+  componentDidMount() {
+    getFromDatabase("gabypernama", this.getCurrentChanges);
   }
 
   splitArr() {
@@ -134,6 +140,18 @@ export default class EditPage extends React.Component {
             }}
           />
         </View>
+        <Text style={styles.text}>{"\n"}Hours Preferred: </Text>
+        <View style={styles.container}>
+          <TextInput
+            style={styles.longBox}
+            value={`${this.state.hours}`}
+            placeholder="   Morning"
+            placeholderTextColor="#808080"
+            onChangeText={hours => {
+              this.setState({ hours }, () => console.log(this.state.hours));
+            }}
+          />
+        </View>
         <Text style={styles.text}>{"\n"}About Me: </Text>
         <View style={styles.container}>
           <TextInput
@@ -150,14 +168,9 @@ export default class EditPage extends React.Component {
         </View>
         <Button
           title="Save"
-          onPress={
-            () => {
-              this.splitArr();
-            }
-
-            // this.addTODatabase().then(
-            //   this.props.navigation.navigate("DisplayProfile")
-          }
+          onPress={() => {
+            this.splitArr();
+          }}
         />
       </ScrollView>
     );
