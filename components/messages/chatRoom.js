@@ -8,10 +8,9 @@ import {
     StyleSheet,
     Dimensions,
     ScrollView,
-    KeyboardAvoidingView,
     Keyboard
 } from 'react-native';
-
+import DisplayProfile from './buddyProfile.js'
 import db from '../../firebase/chatDB.js';
 
 const screen_height = Dimensions.get('window').height;
@@ -24,11 +23,13 @@ export default class ChatRoom extends Component {
             messages: [],
             text: '',
             keyboard: false,
+            buddy: null,
         }
         this.fetchMessages = this.fetchMessages.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this._keyboardWillShow = this._keyboardWillShow.bind(this);
         this._keyboardWillHide = this._keyboardWillHide.bind(this);
+        this.handleBuddyProfile = this.handleBuddyProfile.bind(this);
     }
 
     componentDidMount () {
@@ -56,6 +57,10 @@ export default class ChatRoom extends Component {
           })
     }
 
+    handleBuddyProfile (value) {
+        this.setState({ buddy: value })
+    }
+
     handleSubmit () {
         let messId = this.state.messages.length;
         if (this.state.text !== ''){
@@ -76,6 +81,8 @@ export default class ChatRoom extends Component {
         }
 
         return (
+
+            this.state.buddy === null?
             <View
             style ={[styles.bigContainer]}
             scrollEnabled={false}  
@@ -91,6 +98,7 @@ export default class ChatRoom extends Component {
                 </Button>
                 <Text
                 style = {[styles.partner]}
+                onPress = {() => this.handleBuddyProfile(this.props.partner)}
                 >{this.props.partner}</Text>
                 </View>
                 <View
@@ -137,7 +145,11 @@ export default class ChatRoom extends Component {
                     style = {[styles.submit]}
                     />
                 </View>
-            </View> 
+            </View> :
+            <DisplayProfile 
+            buddy= {this.state.buddy}
+            handleBuddyProfile = {this.handleBuddyProfile}
+            />
         )
     }
 }
@@ -156,6 +168,8 @@ const styles = StyleSheet.create({
         flexWrap: 'nowrap',
         flexDirection: 'row',
         width: screen_width,
+        borderColor: "#E8E8E8",
+        borderBottomWidth: 1,
     },
 
     backButton: {
@@ -220,7 +234,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         fontSize: 13,
         width: '80%',
-        borderWidth: 1,
         height: 30,
         borderColor: "gray",
         borderWidth: 1,

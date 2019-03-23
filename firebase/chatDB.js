@@ -1,5 +1,4 @@
 const { db } = require('./firebase.js');
-const Promise = require('bluebird')
 
 const fetchChatRooms = (userName, callback) => {
   let arr = [];
