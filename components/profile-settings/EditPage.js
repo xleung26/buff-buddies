@@ -13,23 +13,23 @@ import {
 } from "../profile-settings/changeDb.js";
 
 export default class EditPage extends React.Component {
-  state = {
-    aboutMe: "",
-    activities: [],
-    gym: "",
-    hours: "",
-    image: "",
-    location: "",
-    first: "",
-    last: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      aboutMe: "",
+      activities: "",
+      gym: "",
+      hours: "",
+      image: "",
+      location: "",
+      first: "",
+      last: ""
+    };
+    this.splitArr = this.splitArr.bind(this);
+  }
   static navigationOptions = {
     title: "Edit Page"
   };
-
-  addTODatabase() {
-    return addToDatabase(this.state, "gabypernama");
-  }
 
   componentDidMount() {
     getFromDatabase("gabypernama").then(snapshot => {
@@ -55,6 +55,19 @@ export default class EditPage extends React.Component {
         last
       });
     });
+  }
+
+  splitArr() {
+    const userObj = this.state;
+    let { activities } = userObj;
+    if (typeof activities === "string") {
+      activities = activities.split(","); // ["Biking", " running", " walking"]
+      userObj.activities = activities;
+    }
+
+    addToDatabase(userObj, "gabypernama").then(
+      this.props.navigation.navigate("DisplayProfile")
+    );
   }
 
   render() {
@@ -138,10 +151,10 @@ export default class EditPage extends React.Component {
         <Button
           title="Save"
           onPress={
-            () =>
-              this.addTODatabase().then(
-                this.props.navigation.navigate("DisplayProfile")
-              )
+            () => {
+              this.splitArr();
+            }
+
             // this.addTODatabase().then(
             //   this.props.navigation.navigate("DisplayProfile")
           }
