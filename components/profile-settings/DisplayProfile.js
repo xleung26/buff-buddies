@@ -41,7 +41,7 @@ class DisplayProfile extends React.Component {
   };
 
   componentDidMount() {
-    getFromDatabase("aqilthanawala").then(snapshot => {
+    getFromDatabase("jkelly").then(snapshot => {
       let test = snapshot.val();
       let { aboutMe, activities, gym, hours, image, location, name } = test;
       this.setState({ aboutMe, activities, gym, hours, image, location, name });

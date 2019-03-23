@@ -7,24 +7,47 @@ import {
     TextInput, 
     StyleSheet,
     Dimensions,
-    ScrollView
+    ScrollView,
+    KeyboardAvoidingView,
+    Keyboard
 } from 'react-native';
 
 import db from '../../firebase/chatDB.js';
+
+const screen_height = Dimensions.get('window').height;
+const screen_width = Dimensions.get('window').width;
 
 export default class ChatRoom extends Component {
     constructor(props){
         super(props);
         this.state = {
             messages: [],
-            text: ''
+            text: '',
+            keyboard: false,
         }
         this.fetchMessages = this.fetchMessages.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this._keyboardWillShow = this._keyboardWillShow.bind(this);
+        this._keyboardWillHide = this._keyboardWillHide.bind(this);
     }
 
     componentDidMount () {
       this.fetchMessages()
+      this.keyboardWillShowListener = Keyboard.addListener(
+        'keyboardWillShow',
+        this._keyboardWillShow,
+      );
+      this.keyboardWillHideListener = Keyboard.addListener(
+          'keyboardWillHide', this._keyboardWillHide,
+      );
+    }
+
+    _keyboardWillShow () {
+        this.setState({ keyboard: true })
+    }
+
+    _keyboardWillHide () {
+        this.setState({ keyboard: false })
     }
 
     fetchMessages () {
@@ -42,6 +65,15 @@ export default class ChatRoom extends Component {
     }
 
     render () {
+
+        let adjKeyboard = {bottom: 0}
+
+        let adjMessageBox = {height: screen_height * .68}       
+
+        if (this.state.keyboard) {
+            adjKeyboard.bottom = 15
+            adjMessageBox.height = screen_height * .35
+        }
 
         return (
             <View
@@ -62,11 +94,12 @@ export default class ChatRoom extends Component {
                 >{this.props.partner}</Text>
                 </View>
                 <View
-                style ={[styles.messageContainer]}
-                scrollEnabled={false}                  
+                style ={[styles.messageContainer, adjMessageBox]}           
                 >
                 <ScrollView 
-                style ={[styles.scroll]}
+                style ={[styles.scroll, adjMessageBox]}
+                ref = 'scrollView'
+                onContentSizeChange = {() => this.refs.scrollView.scrollToEnd({ animated: false })}
                 >
                 {this.state.messages.length !== 0 ?
                 this.state.messages.map((item, index) => {return <View
@@ -85,13 +118,13 @@ export default class ChatRoom extends Component {
                 <Text
                 >{`\n\n\n`}</Text>
                 <View
-                style = {[styles.submissionContainer]} 
+                style = {[styles.submissionContainer, adjKeyboard]} 
                 >
                     <TextInput 
-                    placeholder = 'Type here'
+                    placeholder = '  Type here'
                     onChangeText = {(text) => this.setState({text})}
                     ref={input => { this.textInput = input}}
-                    style = {[styles.textInput]}                    
+                    style = {[styles.textInput]}
                     />
                     <Button 
                     onPress = {this.handleSubmit}
@@ -104,8 +137,6 @@ export default class ChatRoom extends Component {
     }
 }
 
-const screen_height = Dimensions.get('window').height;
-const screen_width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     bigContainer: {
@@ -130,7 +161,7 @@ const styles = StyleSheet.create({
         fontSize: 20,    
         fontWeight: 'bold',
         alignSelf: 'center',
-        marginLeft: 100
+        marginLeft: 60
     },
 
     message: {
@@ -144,7 +175,10 @@ const styles = StyleSheet.create({
         height: screen_height * .68,
         marginLeft: 5,
         marginRight: 5,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        left: 0,
+        right: 0,
+        bottom: 0,
 
     },
 
@@ -179,9 +213,12 @@ const styles = StyleSheet.create({
     textInput: {
         alignSelf: 'flex-start',
         fontSize: 13,
-        width: '75%',
+        width: '80%',
         borderWidth: 1,
-        height: 30
+        height: 30,
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 6
     },
 
     submit: {
