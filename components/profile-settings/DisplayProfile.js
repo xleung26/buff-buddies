@@ -14,16 +14,20 @@ import { Avatar, Input } from "react-native-elements";
 import EditPage from "./EditPage.js";
 
 class DisplayProfile extends React.Component {
-  state = {
-    aboutMe: "Hi, i love deadlifts and spa dates",
-    activities: ["biking", "swimming", "`fun stuff"],
-    gym: "25 Hr fitness",
-    hours: "3am",
-    image: "url",
-    location: "fine",
-    first: "",
-    last: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      aboutMe: "Hi, i love deadlifts and spa dates",
+      activities: ["biking", "swimming", "`fun stuff"],
+      gym: "25 Hr fitness",
+      hours: "3am",
+      image: "url",
+      location: "fine",
+      first: "",
+      last: ""
+    };
+    this.getProfile = this.getProfile.bind(this);
+  }
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -40,30 +44,32 @@ class DisplayProfile extends React.Component {
     };
   };
 
-  componentDidMount() {
-    getFromDatabase("gabypernama").then(snapshot => {
-      let test = snapshot.val();
-      let {
-        aboutMe,
-        activities,
-        gym,
-        hours,
-        image,
-        location,
-        first,
-        last
-      } = test;
-      this.setState({
-        aboutMe,
-        activities,
-        gym,
-        hours,
-        image,
-        location,
-        first,
-        last
-      });
+  getProfile = snapshot => {
+    let test = snapshot.val();
+    let {
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
+    } = test;
+    this.setState({
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
     });
+  };
+
+  componentDidMount() {
+    getFromDatabase("gabypernama", this.getProfile);
   }
 
   render() {
