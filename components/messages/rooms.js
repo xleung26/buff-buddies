@@ -9,7 +9,7 @@ export default class Rooms extends Component {
     constructor(props){
         super(props);
         this.state = {
-            currentUser: 'jkelly',
+            currentUser: 'aqilthanawala',
             chatId: [],
             users: [],
             chatRoomId: null

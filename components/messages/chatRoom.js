@@ -99,6 +99,9 @@ export default class ChatRoom extends Component {
                 <ScrollView 
                 style ={[styles.scroll, adjMessageBox]}
                 ref = 'scrollView'
+                keyboardShouldPersistTaps='handled'
+                keyboardDismissMode='on-drag'
+                onLayout={() => this.refs.scrollView.scrollToEnd({ animated: false })}
                 onContentSizeChange = {() => this.refs.scrollView.scrollToEnd({ animated: false })}
                 >
                 {this.state.messages.length !== 0 ?
@@ -119,6 +122,8 @@ export default class ChatRoom extends Component {
                 >{`\n\n\n`}</Text>
                 <View
                 style = {[styles.submissionContainer, adjKeyboard]} 
+                keyboardShouldPersistTaps='handled'
+                keyboardDismissMode='on-drag'
                 >
                     <TextInput 
                     placeholder = '  Type here'
@@ -150,6 +155,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexWrap: 'nowrap',
         flexDirection: 'row',
+        width: screen_width,
     },
 
     backButton: {
@@ -160,8 +166,8 @@ const styles = StyleSheet.create({
     partner: {
         fontSize: 20,    
         fontWeight: 'bold',
-        alignSelf: 'center',
-        marginLeft: 60
+        alignSelf: 'auto',
+        marginLeft: 90
     },
 
     message: {
