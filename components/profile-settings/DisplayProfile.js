@@ -21,8 +21,8 @@ class DisplayProfile extends React.Component {
     hours: "3am",
     image: "url",
     location: "fine",
-    name: { first: "Jane", last: "Doe" },
-    change: false
+    first: "",
+    last: ""
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -41,10 +41,28 @@ class DisplayProfile extends React.Component {
   };
 
   componentDidMount() {
-    getFromDatabase("usainbolt").then(snapshot => {
+    getFromDatabase("gabypernama").then(snapshot => {
       let test = snapshot.val();
-      let { aboutMe, activities, gym, hours, image, location, name } = test;
-      this.setState({ aboutMe, activities, gym, hours, image, location, name });
+      let {
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      } = test;
+      this.setState({
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      });
     });
   }
 
@@ -64,7 +82,7 @@ class DisplayProfile extends React.Component {
               }}
             />
             <Text style={styles.name}>
-              {this.state.name.first} {this.state.name.last}
+              {this.state.first} {this.state.last}
             </Text>
           </View>
           <View style={styles.activities}>
