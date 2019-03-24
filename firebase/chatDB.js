@@ -13,20 +13,39 @@ const fetchChatRooms = (userName, callback) => {
 
 // just invoke this one function ------------------------------->
 const chatStore = (userName1, userName2) => {
-  db.ref(`chat/`).once('value', async (snapshot) => {
+  db.ref(`pairTracker/${userName1}`).once('value', (snapshot) => {
     let val = snapshot.val();
     if (val === null){
-      await db.ref(`chat/`).set({count: 0})
-      memberStore(userName1, userName2);
-      storeUserChat(userName1);
-      storeUserChat(userName2);
+      db.ref(`chat/`).once('value', async (snapshot) => {
+        let val = snapshot.val();
+        if (val === null){
+          await db.ref(`chat/`).set({count: 0})
+          memberStore(userName1, userName2);
+          pairTracker(userName1, userName2);
+          storeUserChat(userName1);
+          storeUserChat(userName2);
+        } else {
+          await db.ref(`chat/`).set({count: val.count + 1})
+          memberStore(userName1, userName2);
+          pairTracker(userName1, userName2);
+          storeUserChat(userName1);
+          storeUserChat(userName2);
+        }
+      })
     } else {
-      await db.ref(`chat/`).set({count: val.count + 1})
-      memberStore(userName1, userName2);
-      storeUserChat(userName1);
-      storeUserChat(userName2);
+      let resultsArr = Object.values(val);
+      if (!resultsArr.includes(userName2)){
+        db.ref(`chat/`).once('value', async (snapshot) => {
+          let val = snapshot.val();
+            await db.ref(`chat/`).set({count: val.count + 1})
+            memberStore(userName1, userName2);
+            pairTracker(userName1, userName2);
+            storeUserChat(userName1);
+            storeUserChat(userName2);
+        })
+      }
     }
-  }) 
+  })
 }
 
 // ------------------------------------------------------------->
@@ -46,8 +65,8 @@ const storeUserChat = (userName) => {
 
 const memberStore = (userName1, userName2) => {
   chatIdGen((id) => {
-    db.ref(`member/${id}/${userName1}`).set(true);
-    db.ref(`member/${id}/${userName2}`).set(true);
+    db.ref(`member/${id}/${userName1}`).set(userName2);
+    db.ref(`member/${id}/${userName2}`).set(userName1);
   })
 }
 
@@ -62,6 +81,8 @@ const fetchMembers = (arr, userName, callback) => {
                 results.push(key);
                 count += 1;
                 if (count === arr.length) {
+                    temp = new Set(results)
+                    results = [...temp]
                     callback(results);
                 }
               }
@@ -90,6 +111,11 @@ const fetchMessages = (chatId, callback) => {
   }) 
 }
 
+const pairTracker = (userName1, userName2) => {
+  db.ref(`pairTracker/${userName1}`).push(userName2)
+  db.ref(`pairTracker/${userName2}`).push(userName1)
+}
+
 // chatStore(1, 'Mal & Justin');
 // memberStore(5, 'jane','aqilthanawala');
 // storeUserChat('aqilthanawala', 3)
@@ -100,7 +126,7 @@ const fetchMessages = (chatId, callback) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
-// chatStore(`usainbolt`, `Coco123`)
+// chatStore(`usainbolt`, `jkelly`)
 
 
 module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}

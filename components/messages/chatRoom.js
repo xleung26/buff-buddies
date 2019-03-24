@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import {
     View, 
     Text, 
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import DisplayProfile from './buddyProfile.js'
 import db from '../../firebase/chatDB.js';
+import {Avatar} from 'react-native-elements';
 
 const screen_height = Dimensions.get('window').height;
 const screen_width = Dimensions.get('window').width;
@@ -70,7 +70,6 @@ export default class ChatRoom extends Component {
     }
 
     render () {
-
         let adjKeyboard = {bottom: 0}
 
         let adjMessageBox = {height: screen_height * .68}       
@@ -113,13 +112,41 @@ export default class ChatRoom extends Component {
                 onContentSizeChange = {() => this.refs.scrollView.scrollToEnd({ animated: false })}
                 >
                 {this.state.messages.length !== 0 ?
-                this.state.messages.map((item, index) => {return <View
-                  style = {[styles.message]}
-                  key={index}                   
+                this.state.messages.map((item, index) => {
+                  return (item.userName !== this.props.currentUser)? <View
+                  style = {{display: 'flex', flexDirection: 'row', width: 375, justifyContent: 'flex-start'}}
+                  key={index}    
+                  >
+                  <View
+                  style = {[styles.buddyMessage]}               
+                  >
+                  <Avatar
+                  rounded
+                  source={{uri: 'https://s3-us-west-1.amazonaws.com/sephoraimage/explores/pic13.jpg'}}
+                  size='small'
+                  /><Text>{`    `}</Text>
+                  <Text
+                  style = {styles.budTextMessage}
+                  >{item.message}</Text>
+                  </View>
+                  </View>
+                  : <View
+                  style = {{display: 'flex', flexDirection: 'row', width: 375,justifyContent: 'flex-end'}}
+                  key={index}          
+                  >
+                  <View
+                  style = {[styles.userMessage]}         
                   >
                   <Text
-                  style = {[styles.userName]}
-                  >{item.userName}</Text><Text>{`: `}</Text><Text>{item.message}</Text>
+                  style = {styles.userTextMessage}
+                  >{item.message}</Text>
+                  <Text>{`    `}</Text>
+                  <Avatar
+                  rounded
+                  source={{uri: 'https://s3-us-west-1.amazonaws.com/sephoraimage/explores/pic20.jpg'}}
+                  size='small' 
+                  />
+                  </View>
                   </View>
                 })
                 : <View></View>
@@ -184,15 +211,41 @@ const styles = StyleSheet.create({
         marginLeft: 90
     },
 
-    message: {
+    buddyMessage: {
         display: 'flex',
         flexWrap: 'nowrap',
         flexDirection: 'row',
-        margin: 5
+        margin: 5,
+    },
+
+    userMessage: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        flexDirection: 'row',
+        margin: 5,
+    },
+
+    budTextMessage: {
+        maxWidth: screen_width * 0.6, 
+        alignSelf: 'center',
+        padding: 7,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#F0F0F0'
+    },
+
+    userTextMessage: {
+        maxWidth: screen_width * 0.6, 
+        alignSelf: 'center',
+        padding: 7,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#F0F0F0'
     },
 
     messageContainer: {
         height: screen_height * .68,
+        width: screen_width,
         marginLeft: 5,
         marginRight: 5,
         overflow: 'hidden',
