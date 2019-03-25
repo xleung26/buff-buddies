@@ -5,15 +5,16 @@ import {
   StyleSheet,
   TextInput,
   Button,
-  Text
+  Text,
+  Image
 } from "react-native";
 import {
   addToDatabase,
   getFromDatabase
 } from "../profile-settings/changeDb.js";
 import { storage } from "../../firebase/firebase.js";
+import { ImagePicker, Permissions } from "expo";
 const storageRef = storage.ref();
-const imageRef = storageRef.child("images");
 
 export default class EditPage extends React.Component {
   constructor(props) {
@@ -23,17 +24,25 @@ export default class EditPage extends React.Component {
       activities: "",
       gym: "",
       hours: "",
-      image: "",
+      image: "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg",
       location: "",
       first: "",
       last: ""
     };
     this.splitArr = this.splitArr.bind(this);
     this.getCurrentChanges = this.getCurrentChanges.bind(this);
+    this.useCameraHandler = this.useCameraHandler.bind(this);
+    this.useImageHandler = this.useImageHandler.bind(this);
+    this.handleImagePicked = this.handleImagePicked.bind(this);
+    this.uploadImageAsync = this.uploadImageAsync.bind(this);
   }
   static navigationOptions = {
     title: "Edit Page"
   };
+
+  componentDidMount() {
+    getFromDatabase("gabypernama", this.getCurrentChanges);
+  }
 
   getCurrentChanges(snapshot) {
     let data = snapshot.val();
@@ -42,26 +51,79 @@ export default class EditPage extends React.Component {
       activities,
       gym,
       hours,
-      image,
       location,
       first,
-      last
+      last,
+      image
     } = data;
     this.setState({
       aboutMe,
       activities,
       gym,
       hours,
-      image,
       location,
       first,
-      last
+      last,
+      image
     });
   }
 
-  componentDidMount() {
-    getFromDatabase("gabypernama", this.getCurrentChanges);
-  }
+  useCameraHandler = async () => {
+    await Permissions.askAsync(Permissions.CAMERA);
+    let pickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
+    });
+
+    this.handleImagePicked(pickerResult);
+  };
+
+  useImageHandler = async () => {
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      aspect: [4, 3]
+    });
+
+    this.handleImagePicked(pickerResult);
+    // this.setState({ image: `data:image/jpeg;base64, ${result.base64}` }, () =>
+    //   console.log(this.state.image)
+    // );
+
+    if (!pickerResult.cancelled) {
+    }
+  };
+
+  uploadImageAsync = async uri => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+        resolve(xhr.response);
+      };
+      xhr.onerror = e => {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+    const name = uri.split("/").pop();
+    const imageRef = storageRef.child(`userImages/` + `${name}`);
+    const snapshot = await imageRef
+      .put(blob)
+      .then(() => console.log("blob sent!"));
+
+    blob.close();
+
+    return await imageRef.getDownloadURL();
+  };
+
+  handleImagePicked = async pickerResult => {
+    let uploadUrl = await this.uploadImageAsync(pickerResult.uri);
+    this.setState({ image: uploadUrl }, () => {
+      console.log(this.state.image);
+    });
+  };
 
   splitArr() {
     const userObj = this.state;
@@ -77,8 +139,21 @@ export default class EditPage extends React.Component {
   }
 
   render() {
+    const { image } = this.state;
     return (
       <ScrollView>
+        <View style={styles.parentimg}>
+          <Image
+            source={{
+              uri: image
+            }}
+            style={styles.img}
+          />
+        </View>
+        <View style={styles.container}>
+          <Button title="Take Photo" onPress={() => this.useCameraHandler()} />
+          <Button title="Choose Photo" onPress={() => this.useImageHandler()} />
+        </View>
         <Text style={styles.text}>Name: </Text>
         <View style={styles.container}>
           <TextInput
@@ -200,6 +275,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 4,
     borderRadius: 6
+  },
+  parentimg: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center"
+  },
+  img: {
+    width: 200,
+    height: 200,
+    borderRadius: 5
   },
   aboutMe: {
     height: 150,

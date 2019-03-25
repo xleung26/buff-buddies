@@ -83,8 +83,7 @@ class DisplayProfile extends React.Component {
               rounded
               size="xlarge"
               source={{
-                uri:
-                  "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg" //this will be this.state.url
+                uri: this.state.image //this will be this.state.url
               }}
             />
             <Text style={styles.name}>
