@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { getFromDatabase } from "../profile-settings/changeDb.js";
 import { Avatar, Input } from "react-native-elements";
-import EditPage from "./EditPage.js";
+// import EditPage from "./EditPage.js";
 
 class DisplayProfile extends React.Component {
   state = {
@@ -67,9 +67,9 @@ class DisplayProfile extends React.Component {
   }
 
   render() {
-    if (this.state.change) {
-      return <EditPage />;
-    } else {
+    // if (this.state.change) {
+    //   return <EditPage />;
+    // } else {
       return (
         <ScrollView>
           <View style={styles.container}>
@@ -116,7 +116,7 @@ class DisplayProfile extends React.Component {
       );
     }
   }
-}
+// }
 
 const styles = StyleSheet.create({
   container: {

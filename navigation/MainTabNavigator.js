@@ -11,10 +11,21 @@ import FindBuddyScreen from "../screens/FindBuddyScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import DisplayProfile from "../components/profile-settings/DisplayProfile.js";
 import EditPage from "../components/profile-settings/EditPage.js";
+import ChatRoom from '../components/messages/chatRoom.js';
+import Rooms from '../components/messages/rooms.js';
+import BuddyProfile from '../components/messages/buddyProfile.js'
+import MessagesDisplay from '../components/messages/messagesDisplay.js'
 
 const MessagesStack = createStackNavigator({
-  Messages: MessagesScreen
-});
+  MessagesScreen: {screen: MessagesScreen},
+  Rooms: {screen: Rooms},
+  MessagesDisplay: {screen: MessagesDisplay},
+  ChatRoom: {screen: ChatRoom},
+  BuddyProfile: {screen: BuddyProfile}
+},
+{initialRouteName: 
+  "Rooms"}
+);
 
 MessagesStack.navigationOptions = {
   tabBarLabel: "Messages",

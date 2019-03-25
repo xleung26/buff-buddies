@@ -5,6 +5,7 @@ import db from '../../firebase/chatDB.js'
 import ChatRoom from './chatRoom.js';
 import {Card} from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
+// import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 export default class Rooms extends Component {
 
@@ -40,10 +41,20 @@ export default class Rooms extends Component {
         console.log('hi')
     }
 
+    _navigateToChatRoom = () => {
+        this.props.navigation.navigate("ChatRoom", {
+            partner: this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)],
+            chatRoom: this.state.chatRoomId,
+            currentUser: this.state.currentUser,
+        }
+        )
+      }
+
     render () {
         return (
 
-            this.state.chatRoomId === null ?
+            // this.state.chatRoomId === null ?
+
             <Card
             title = 'BUDDIES'
             >
@@ -52,22 +63,42 @@ export default class Rooms extends Component {
                     <MessagesDisplay 
                     name = {item}
                     key = {index}
-                    id = {this.state.chatId[index]}
-                    changeChatRoom = {this.changeChatRoom}
+                    _navigateToChatRoom = {this._navigateToChatRoom}
+                    // id = {this.state.chatId[index]}
+                    // changeChatRoom = {this.changeChatRoom}
                     />
                 ): <Text></Text>}
             </ScrollView>
-            </Card>:
-            <ChatRoom
-            partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
-            messages = {this.state.messages}
-            chatRoom = {this.state.chatRoomId}
-            changeChatRoom = {this.changeChatRoom}
-            currentUser = {this.state.currentUser}
-            />            
+            </Card>
+            // :
+            // <ChatRoom
+            // partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
+            // messages = {this.state.messages}
+            // chatRoom = {this.state.chatRoomId}
+            // changeChatRoom = {this.changeChatRoom}
+            // currentUser = {this.state.currentUser}
+            // />            
         )
     }
 }
+
+// const MessagingApp = createStackNavigator(
+//     {
+//         Rooms: Rooms,
+//         ChatRoom: ChatRoom,
+//     },
+//     {
+//         initialRouteName: Rooms
+//     }
+// )
+
+// const AppContainer = createAppContainer(MessagingApp);
+
+// export default class MessageApp extends Component {
+//     render () {
+//         return <AppContainer />
+//     }
+// }
 
 
 // export is the object

@@ -55,7 +55,8 @@ export default class ChatRoom extends Component {
     }
 
     fetchMessages () {
-        db.fetchMessages(this.props.chatRoom, (data) => {
+        const chatRoom = this.props.navigation.getParam('chatRoom', 'no-id')
+        db.fetchMessages(chatRoom, (data) => {
             this.setState({ messages: data })
           })
     }
@@ -65,14 +66,20 @@ export default class ChatRoom extends Component {
     }
 
     handleSubmit () {
+        const chatRoom = this.props.navigation.getParam('chatRoom', 'no-id')
+        const currentUser = this.props.navigation.getParam('currentUser', 'no-id')
         let messId = this.state.messages.length;
         if (this.state.text !== ''){
-            db.messagesStore(this.props.chatRoom, messId, this.props.currentUser, this.state.text)
+            db.messagesStore(chatRoom, messId, currentUser, this.state.text)
         }
         this.textInput.clear()
     }
 
     render () {
+        const partner = this.props.navigation.getParam('partner', 'no-id')
+        const currentUser = this.props.navigation.getParam('currentUser', 'no-id')
+        const currentUser = this.props.navigation.getParam('currentUser', 'no-id')
+
         let adjKeyboard = {bottom: 0}
 
         let adjMessageBox = {height: screen_height * .66}       
@@ -100,11 +107,11 @@ export default class ChatRoom extends Component {
                 </Button>
                 <Text
                 style = {[styles.partner]}
-                onPress = {() => this.handleBuddyProfile(this.props.partner)}
-                >{this.props.partner}</Text>
+                onPress = {() => this.handleBuddyProfile(partner)}
+                >{partner}</Text>
                 </View>
                 <View
-                style ={[styles.messageContainer, adjMessageBox]}           
+                style ={[styles.messageContainer, adjMessageBox]}
                 >
                 <ScrollView 
                 style ={[styles.scroll, adjMessageBox]}
@@ -116,7 +123,7 @@ export default class ChatRoom extends Component {
                 >
                 {this.state.messages.length !== 0 ?
                 this.state.messages.map((item, index) => {
-                  return (item.userName !== this.props.currentUser)? <View
+                  return (item.userName !== currentUser)? <View
                   style = {{display: 'flex', flexDirection: 'row', width: 375, justifyContent: 'flex-start'}}
                   key={index}    
                   >
@@ -175,7 +182,8 @@ export default class ChatRoom extends Component {
                     style = {[styles.submit]}
                     />
                 </View>
-            </View> :
+            </View> 
+            :
             <DisplayProfile 
             buddy= {this.state.buddy}
             handleBuddyProfile = {this.handleBuddyProfile}

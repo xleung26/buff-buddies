@@ -1,38 +1,40 @@
 import React, {Component} from 'react';
 import { View, StyleSheet, Button } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import ChatRoom from './chatRoom.js';
 
 export default class MessagesDisplay extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            chatRoomId: null
-        }
-    }
+  constructor(props){
+      super(props);
+      this.state = {
+          chatRoomId: null
+      }
+  }
 
-    render () {
-      let chatRoom = this.props.id
-      return (
+  render () {
+
+    return (
+      <View
+      style ={[styles.card]}
+      >
         <View
-        style ={[styles.card]}
+        style = {[styles.cardInside]}
         >
-          <View
-          style = {[styles.cardInside]}
-          >
-            <Avatar
-            rounded
-            source={{uri: 'https://s3-us-west-1.amazonaws.com/sephoraimage/explores/pic13.jpg'}}
-            size='medium'
-            />
-            <Button 
-            onPress={() => {this.props.changeChatRoom(chatRoom)}} 
-            title = {`   ${this.props.name}`}
-            color='#841584'
-            />
-          </View>
-        </View> 
-      )
-    }
+          <Avatar
+          rounded
+          source={{uri: 'https://s3-us-west-1.amazonaws.com/sephoraimage/explores/pic13.jpg'}}
+          size='medium'
+          />
+          <Button 
+          // onPress={() => {this.props.changeChatRoom(chatRoom)}}
+          onPress={this.props._navigateToChatRoom}
+          title = {`   ${this.props.name}`}
+          color='#841584'
+          />
+        </View>
+      </View> 
+    )
+  }
 }
 
 const styles = StyleSheet.create({
