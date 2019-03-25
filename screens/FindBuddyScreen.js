@@ -3,6 +3,7 @@ import {
   Animated,
   Dimensions,
   Image,
+  ImageBackground,
   PanResponder,
   Platform,
   StyleSheet,
@@ -14,6 +15,7 @@ import {
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
 import { chatStore } from '../firebase/chatDB.js';
+import { getUsers, storeAndCheckMatch } from '../firebase/findMatches.js';
 const currentUser = {
   id: 'aqilthanawala',
   name: {
@@ -25,81 +27,10 @@ const currentUser = {
   hours: 'Afternoon',
   gym: 'LA Fitness',
 }
-const matches = {
-  aqilthanawala: {
-  
-  },
-  jkelly: {
-    'aqilthanawala': true
-  }
-}
-const users = [
-  { id: '1',
-    image: 'http://www.availableideas.com/wp-content/uploads/2016/02/Dog-bites-canvas-shoes-iPhone-6-Wallpaper.jpg',
-    name: {
-      first: 'Joe',
-      last: 'Shoe'
-    },
-    location: '90025',
-    activities: ['Running', 'Lifting'],
-    hours: 'Afternoon',
-    aboutMe: 'Woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof woof I like shoes',
-    gym: 'LA Fitness'
-  },
-  { id: '2',
-    image: 'http://www.ohlays.com/wallpapers/dog1.jpg',
-    name: {
-      first: 'Air',
-      last: 'Bud'
-    },
-    location: '90025',
-    activities: ['Running', 'Basketball'],
-    hours: 'Afternoon',
-    aboutMe: 'Bark bark',
-    gym: 'LA Fitness'
-  },
-  { id: 'jkelly',
-    image: 'https://wallpaperaccess.com/full/690074.jpg',
-    name: {
-      first: 'Jun',
-      last: 'Kelly'
-    },
-    location: '90025',
-    activities: ['Running', 'Swimming'],
-    hours: 'Afternoon',
-    aboutMe: 'What\'s up dawg. Just lookin for a chill workout pal.',
-    gym: 'LA Fitness'
-  },
-  { id: '4',
-    image: 'https://iphonewalls.net/wp-content/uploads/2015/01/Cute%20Pug%20Dog%20Laughing%20iPhone%206%20Plus%20HD%20Wallpaper-320x480.jpg',
-    name: {
-      first: 'John',
-      last: 'Chewer'
-    },
-    location: '90025',
-    activities: ['Lifting'],
-    hours: 'Afternoon',
-    aboutMe: 'I like shoes',
-    gym: 'LA Fitness'
-  },
-  { id: '5',
-    image: 'https://i.pinimg.com/originals/fd/48/0f/fd480f0e5e1ae24a584587f70664d4ac.jpg',
-    name: {
-      first: 'Greg',
-      last: 'Smith'
-    },
-    location: '90025',
-    activities: ['Running', 'Swimming'],
-    hours: 'Afternoon',
-    aboutMe: 'Hi I\'m Greg and I want to get swole',
-    gym: 'LA Fitness'
-  },
-];
 
-const storeAndCheckMatch = (currentUser, targetUser) => {
-  matches[currentUser][targetUser] = true;
-  if (matches[targetUser]) {
-    if (matches[targetUser][currentUser]) {
+const matchCheckHandler = (currentUser, targetUser) => {
+  storeAndCheckMatch(currentUser, targetUser, (isMatch) => {
+    if (isMatch) {
       chatStore(currentUser, targetUser);
       Alert.alert(
       'Matched found!',
@@ -120,7 +51,7 @@ const storeAndCheckMatch = (currentUser, targetUser) => {
         {cancelable: false},
       );
     }
-  }
+  });
 }
 
 export default class FindBuddyScreen extends React.Component {
@@ -130,7 +61,8 @@ export default class FindBuddyScreen extends React.Component {
     this.position = new Animated.ValueXY();
     this.state = {
       currentIndex: 0,
-      targetUser: null
+      targetUser: null,
+      users: []
     };
   }
 
@@ -139,12 +71,19 @@ export default class FindBuddyScreen extends React.Component {
   };
 
   componentWillMount() {
+    getUsers('90025', currentUser.id, (data) => {
+      this.setState({
+        targetUser: data[0].id,
+        users: data
+      });
+    });
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
         this.position.setValue({ x: gestureState.dx, y: gestureState.dy })
       },
       onPanResponderRelease: (evt, gestureState) => {
+        let users = this.state.users;
         if (gestureState.dx > 120) {
           Animated.spring(this.position, { toValue: { x: screen_width + 100, y: gestureState.dy } }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1] ? users[this.state.currentIndex + 1].id : null
@@ -152,7 +91,7 @@ export default class FindBuddyScreen extends React.Component {
               this.position.setValue({ x: 0, y: 0 });
             });
           });
-          storeAndCheckMatch(currentUser.id, users[this.state.currentIndex].id);
+          matchCheckHandler(currentUser.id, users[this.state.currentIndex].id);
         } else if (gestureState.dx < -120) {
           Animated.spring(this.position, { toValue: { x: - screen_width - 100, y: gestureState.dy } }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1, targetUser: users[this.state.currentIndex + 1] ? users[this.state.currentIndex + 1].id: null
@@ -165,12 +104,19 @@ export default class FindBuddyScreen extends React.Component {
         }
       }
     });
-    this.setState({
-      targetUser: users[0].id
-    });
   }
 
-  renderUsers = () => {
+renderUsers = () => {
+  let users = this.state.users;
+    if (this.state.currentIndex >= users.length) {
+      return (
+        <View>
+          <Text>
+            No more users :( Try again later
+          </Text>
+        </View>
+      );
+    } else {
     return users.map((item, i) => {
       let activitiesLength = item.activities.length;
       if (i < this.state.currentIndex) {
@@ -215,34 +161,30 @@ export default class FindBuddyScreen extends React.Component {
         return (
           <Animated.View 
             key={item.id} style={[styles.animatedContainer, {padding: 0, borderWidth: 0}]}>
-            <Image style={styles.blurredImage} source={{uri: item.image}} blurRadius={30}>
+            <Image style={styles.blurredImage} source={{uri: item.image}} blurRadius={10}>
             </Image>
           </Animated.View>
         );
       }
     }).reverse();
+    }
   }
 
   render() {
+    let users = this.state.users;
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../assets/images/fb-splash.png')} style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={{fontSize: 20, paddingTop: 10}}>
-            SWIPE CARD TO FIND A BUDDY
+          <Text style={{fontSize: 25, paddingTop: 10, color: 'white', fontWeight: 'bold'}}>
+            SWIPE CARD TO FIND A MATCH
           </Text>
         </View>
         <View style={styles.innerContainer}>
           {this.renderUsers()}
         </View>
         <View style={styles.bottomContainer}>
-            <Text style={styles.textLeft}>
-              {'\u2190'} NO
-            </Text>
-            <Text style={styles.textRight}>
-              YES {'\u2192'}
-            </Text>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 
@@ -264,7 +206,7 @@ const screen_width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F8FF',
+      //backgroundColor: '#F7E5E5',
   },
   topContainer: {
     height: 80,
@@ -320,8 +262,8 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: 'rgba(0,0,0,0.9)',
-    fontSize: 13,
-    lineHeight: 14,
+    fontSize: 15,
+    lineHeight: 17,
     textAlign: 'left',
   },
   textLeft: {
