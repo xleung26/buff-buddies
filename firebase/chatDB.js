@@ -71,24 +71,24 @@ const memberStore = (userName1, userName2) => {
 }
 
 const fetchMembers = (arr, userName, callback) => {
-    let results = [];
-    let count = 0;
-    for(let i = 0; i < arr.length; i += 1){
-        db.ref(`member/${arr[i]}`).on('value', (snapshot) => {
-            let val = snapshot.val();
-            for (let key in val){
-              if (key !== userName){
-                results.push(key);
-                count += 1;
-                if (count === arr.length) {
-                    temp = new Set(results)
-                    results = [...temp]
-                    callback(results);
-                }
-              }
+  let results = [];
+  let count = 0;
+  for(let i = 0; i < arr.length; i += 1){
+    db.ref(`member/${arr[i]}`).on('value', (snapshot) => {
+        let val = snapshot.val();
+        for (let key in val){
+          if (key !== userName){
+            results.push(key);
+            count += 1;
+            if (count === arr.length) {
+                temp = new Set(results)
+                results = [...temp]
+                callback(results);
             }
-        })
-    }
+          }
+        }
+    })
+  }
 }
 
 const messagesStore = (chatId, messageId, userName, message) => {
@@ -126,7 +126,7 @@ const pairTracker = (userName1, userName2) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
-// chatStore(`usainbolt`, `jkelly`)
+// chatStore(`Coco123`, `aqilthanawala`)
 
 
 module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}

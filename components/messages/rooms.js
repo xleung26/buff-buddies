@@ -3,6 +3,8 @@ import { Button, Text, View } from 'react-native';
 import MessagesDisplay from './messagesDisplay.js';
 import db from '../../firebase/chatDB.js'
 import ChatRoom from './chatRoom.js';
+import {Card} from 'react-native-elements'
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class Rooms extends Component {
 
@@ -42,7 +44,10 @@ export default class Rooms extends Component {
         return (
 
             this.state.chatRoomId === null ?
-            <View>
+            <Card
+            title = 'BUDDIES'
+            >
+            <ScrollView>
                 {this.state.users.length !== 0? this.state.users.map((item, index) =>  
                     <MessagesDisplay 
                     name = {item}
@@ -51,7 +56,8 @@ export default class Rooms extends Component {
                     changeChatRoom = {this.changeChatRoom}
                     />
                 ): <Text></Text>}
-            </View>:
+            </ScrollView>
+            </Card>:
             <ChatRoom
             partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
             messages = {this.state.messages}

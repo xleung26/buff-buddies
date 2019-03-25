@@ -17,6 +17,9 @@ const screen_height = Dimensions.get('window').height;
 const screen_width = Dimensions.get('window').width;
 
 export default class ChatRoom extends Component {
+    // static navigationOptions = {
+    //     title: this.props.partner
+    // }
     constructor(props){
         super(props);
         this.state = {
@@ -72,7 +75,7 @@ export default class ChatRoom extends Component {
     render () {
         let adjKeyboard = {bottom: 0}
 
-        let adjMessageBox = {height: screen_height * .68}       
+        let adjMessageBox = {height: screen_height * .66}       
 
         if (this.state.keyboard) {
             adjKeyboard.bottom = 15
@@ -229,22 +232,26 @@ const styles = StyleSheet.create({
         maxWidth: screen_width * 0.6, 
         alignSelf: 'center',
         padding: 7,
-        borderWidth: 1,
         borderRadius: 10,
-        borderColor: '#F0F0F0'
+        backgroundColor: '#f2f2f2',
+        overflow: 'hidden',
+        fontSize: 15,    
+
     },
 
     userTextMessage: {
         maxWidth: screen_width * 0.6, 
         alignSelf: 'center',
         padding: 7,
-        borderWidth: 1,
         borderRadius: 10,
-        borderColor: '#F0F0F0'
+        backgroundColor: '#ff6666',
+        overflow: 'hidden',
+        fontSize: 15,    
+
     },
 
     messageContainer: {
-        height: screen_height * .68,
+        height: screen_height * .66,
         width: screen_width,
         marginLeft: 5,
         marginRight: 5,
@@ -257,7 +264,7 @@ const styles = StyleSheet.create({
 
     scroll: {
         overflow: 'hidden',
-        height: screen_height * .68,
+        height: screen_height * .66,
     },
 
     userName: {
