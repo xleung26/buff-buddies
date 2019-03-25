@@ -7,36 +7,67 @@ import {
   Text,
   View,
   ScrollView,
+  Dimensions,
   Button
 } from "react-native";
 import { getFromDatabase } from "../profile-settings/changeDb.js";
 import { Avatar, Input } from "react-native-elements";
 
+const screen_height = Dimensions.get('window').height;
+const screen_width = Dimensions.get('window').width;
+
+
 class DisplayProfile extends React.Component {
-  state = {
-    aboutMe: "Hi, i love deadlifts and spa dates",
-    activities: ["biking", "swimming", "`fun stuff"],
-    gym: "25 Hr fitness",
-    hours: "3am",
-    image: "url",
-    location: "fine",
-    name: { first: "Jane", last: "Doe" },
-    change: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      aboutMe: "Hi, i love deadlifts and spa dates",
+      activities: ["biking", "swimming", "`fun stuff"],
+      gym: "25 Hr fitness",
+      hours: "3am",
+      image: "url",
+      location: "fine",
+      first: "",
+      last: ""
+    };
+    this.getProfile = this.getProfile.bind(this);
+  }
+
+  getProfile = snapshot => {
+    let test = snapshot.val();
+    let {
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
+    } = test;
+    this.setState({
+      aboutMe,
+      activities,
+      gym,
+      hours,
+      image,
+      location,
+      first,
+      last
+    });
   };
 
   componentDidMount() {
-    getFromDatabase(this.props.buddy).then(snapshot => {
-      let test = snapshot.val();
-      let { aboutMe, activities, gym, hours, image, location, name } = test;
-      this.setState({ aboutMe, activities, gym, hours, image, location, name });
-    });
+    getFromDatabase(this.props.buddy, this.getProfile);
   }
 
   render() {
       return (
-        <ScrollView>
+        <ScrollView
+        style = {{width: screen_width, height: screen_height}}
+        >
           <View style={styles.container}>
-            <Button
+          <Button
                 onPress = {() => this.props.handleBuddyProfile(null)} 
                 title = {`back`}
             >
@@ -45,12 +76,11 @@ class DisplayProfile extends React.Component {
               rounded
               size="xlarge"
               source={{
-                uri:
-                  "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg" //this will be this.state.url
+                uri: this.state.image //this will be this.state.url
               }}
             />
             <Text style={styles.name}>
-              {this.state.name.first} {this.state.name.last}
+              {this.state.first} {this.state.last}
             </Text>
           </View>
           <View style={styles.activities}>
@@ -89,7 +119,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    flexWrap: "wrap",
+    flexWrap: "nowrap",
     justifyContent: "space-evenly",
     paddingTop: 15
   },
@@ -133,3 +163,14 @@ const styles = StyleSheet.create({
 });
 
 export default DisplayProfile;
+
+/*
+
+<Text>Location: {"\n"}</Text>
+<Text>
+  {this.state.location}
+  {"\n"}
+  {"\n"}
+</Text>
+
+*/
