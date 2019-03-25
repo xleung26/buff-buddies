@@ -14,20 +14,16 @@ import { Avatar, Input } from "react-native-elements";
 import EditPage from "./EditPage.js";
 
 class DisplayProfile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      aboutMe: "Hi, i love deadlifts and spa dates",
-      activities: ["biking", "swimming", "`fun stuff"],
-      gym: "25 Hr fitness",
-      hours: "3am",
-      image: "url",
-      location: "fine",
-      first: "",
-      last: ""
-    };
-    this.getProfile = this.getProfile.bind(this);
-  }
+  state = {
+    aboutMe: "Hi, i love deadlifts and spa dates",
+    activities: ["biking", "swimming", "`fun stuff"],
+    gym: "25 Hr fitness",
+    hours: "3am",
+    image: "url",
+    location: "fine",
+    first: "",
+    last: ""
+  };
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -44,32 +40,30 @@ class DisplayProfile extends React.Component {
     };
   };
 
-  getProfile = snapshot => {
-    let test = snapshot.val();
-    let {
-      aboutMe,
-      activities,
-      gym,
-      hours,
-      image,
-      location,
-      first,
-      last
-    } = test;
-    this.setState({
-      aboutMe,
-      activities,
-      gym,
-      hours,
-      image,
-      location,
-      first,
-      last
-    });
-  };
-
   componentDidMount() {
-    getFromDatabase("gabypernama", this.getProfile);
+    getFromDatabase("gabypernama").then(snapshot => {
+      let test = snapshot.val();
+      let {
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      } = test;
+      this.setState({
+        aboutMe,
+        activities,
+        gym,
+        hours,
+        image,
+        location,
+        first,
+        last
+      });
+    });
   }
 
   render() {
@@ -83,7 +77,8 @@ class DisplayProfile extends React.Component {
               rounded
               size="xlarge"
               source={{
-                uri: this.state.image //this will be this.state.url
+                uri:
+                  "https://s3-us-west-1.amazonaws.com/abibasnavbar/Coco+cute.jpg" //this will be this.state.url
               }}
             />
             <Text style={styles.name}>
