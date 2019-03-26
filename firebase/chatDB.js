@@ -51,7 +51,7 @@ const chatStore = (userName1, userName2) => {
 // ------------------------------------------------------------->
 
 const chatIdGen = (callback) => {
-  db.ref(`chat/`).on('value', (snapshot) => {
+  db.ref(`chat/`).once('value', (snapshot) => {
     let val = snapshot.val().count;
     callback(val);
   })
@@ -126,7 +126,7 @@ const pairTracker = (userName1, userName2) => {
 // fetchMembers([ 1 ], 'Justin', (data) => {
 //     console.log(data)
 // })
-// chatStore(`Coco123`, `aqilthanawala`)
+// chatStore(`sorsok`, `aqilthanawala`)
 
 
 module.exports = { chatStore, messagesStore, fetchChatRooms, fetchMembers, fetchMessages}
