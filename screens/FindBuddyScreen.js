@@ -20,7 +20,7 @@ const currentUser = {
   id: 'aqilthanawala',
   name: {
     first: 'Aqil',
-    last: 'Thanawala'
+    last: 'Pernama'
   },
   location: '90025',
   activities: ['Running'],

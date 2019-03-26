@@ -41,7 +41,7 @@ export default class EditPage extends React.Component {
   };
 
   componentDidMount() {
-    getFromDatabase("gabypernama", this.getCurrentChanges);
+    getFromDatabase("aqilthanawala", this.getCurrentChanges);
   }
 
   getCurrentChanges(snapshot) {
@@ -133,7 +133,7 @@ export default class EditPage extends React.Component {
       userObj.activities = activities;
     }
 
-    addToDatabase(userObj, "gabypernama").then(
+    addToDatabase(userObj, "aqilthanawala").then(
       this.props.navigation.navigate("DisplayProfile")
     );
   }
