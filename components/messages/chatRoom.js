@@ -20,13 +20,27 @@ export default class ChatRoom extends Component {
     // static navigationOptions = {
     //     title: this.props.partner
     // }
+
+    static navigationOptions = ({navigation}) => {
+        const { params } = navigation.state;
+
+        return {
+            title: (
+                <Button
+                title = {params.partner}
+                onPress = {}
+                />
+            )
+        }
+    }
+
     constructor(props){
         super(props);
         this.state = {
             messages: [],
             text: '',
             keyboard: false,
-            buddy: null,
+            chatId: null,
         }
         this.fetchMessages = this.fetchMessages.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,7 +50,11 @@ export default class ChatRoom extends Component {
     }
 
     componentDidMount () {
-      this.fetchMessages()
+      const { navigation } = this.props;
+      const chatId = navigation.getParam('chatId', 'No-Room')
+      this.setState({
+        chatId: chatId
+      }, () => {this.fetchMessages()})
       this.keyboardWillShowListener = Keyboard.addListener(
         'keyboardWillShow',
         this._keyboardWillShow,
@@ -55,7 +73,7 @@ export default class ChatRoom extends Component {
     }
 
     fetchMessages () {
-        db.fetchMessages(this.props.chatRoom, (data) => {
+        db.fetchMessages(this.state.chatId, (data) => {
             this.setState({ messages: data })
           })
     }
@@ -65,9 +83,11 @@ export default class ChatRoom extends Component {
     }
 
     handleSubmit () {
+        const { navigation } = this.props;
+        const currentUser = navigation.getParam('currentUser', 'N/A')
         let messId = this.state.messages.length;
         if (this.state.text !== ''){
-            db.messagesStore(this.props.chatRoom, messId, this.props.currentUser, this.state.text)
+            db.messagesStore(this.state.chatId, messId, currentUser, this.state.text)
         }
         this.textInput.clear()
     }
@@ -81,10 +101,13 @@ export default class ChatRoom extends Component {
             adjKeyboard.bottom = 15
             adjMessageBox.height = screen_height * .35
         }
+        const { navigation } = this.props;
+        const partner = navigation.getParam('partner', 'N/A')
+        const currentUser = navigation.getParam('currentUser', 'N/A')
 
         return (
 
-            this.state.buddy === null?
+            // this.state.buddy === null?
             <View
             style ={[styles.bigContainer]}
             scrollEnabled={false}  
@@ -92,16 +115,16 @@ export default class ChatRoom extends Component {
                 <View
                 style = {[styles.topContainter]}
                 >
-                <Button
+                {/* <Button
                 onPress = {() => this.props.changeChatRoom(null)} 
                 title = {`back`}
                 style = {[styles.backButton]}
                 >
-                </Button>
-                <Text
+                </Button> */}
+                {/* <Text
                 style = {[styles.partner]}
-                onPress = {() => this.handleBuddyProfile(this.props.partner)}
-                >{this.props.partner}</Text>
+                // onPress = {() => this.handleBuddyProfile(this.props.partner)}
+                >{partner}</Text> */}
                 </View>
                 <View
                 style ={[styles.messageContainer, adjMessageBox]}           
@@ -116,7 +139,7 @@ export default class ChatRoom extends Component {
                 >
                 {this.state.messages.length !== 0 ?
                 this.state.messages.map((item, index) => {
-                  return (item.userName !== this.props.currentUser)? <View
+                  return (item.userName !== currentUser)? <View
                   style = {{display: 'flex', flexDirection: 'row', width: 375, justifyContent: 'flex-start'}}
                   key={index}    
                   >
@@ -175,11 +198,13 @@ export default class ChatRoom extends Component {
                     style = {[styles.submit]}
                     />
                 </View>
-            </View> :
-            <DisplayProfile 
-            buddy= {this.state.buddy}
-            handleBuddyProfile = {this.handleBuddyProfile}
-            />
+            </View> 
+            // :
+            
+            // <DisplayProfile 
+            // buddy= {this.state.buddy}
+            // handleBuddyProfile = {this.handleBuddyProfile}
+            // />
         )
     }
 }

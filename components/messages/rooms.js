@@ -14,11 +14,11 @@ export default class Rooms extends Component {
             currentUser: 'aqilthanawala',
             chatId: [],
             users: [],
-            chatRoomId: null
+            // chatRoomId: null
         }
 
-        this.handleClick = this.handleClick.bind(this);
         this.changeChatRoom = this.changeChatRoom.bind(this);
+        this._navigateToChatRoom = this._navigateToChatRoom.bind(this);
     }
 
     componentDidMount () {
@@ -36,14 +36,18 @@ export default class Rooms extends Component {
         this.setState({chatRoomId: value})
     }
 
-    handleClick () {
-        console.log('hi')
+    _navigateToChatRoom = (id, name, currentUser) => {
+        this.props.navigation.navigate("ChatRoom", {
+            partner: name,
+            chatId: id,
+            currentUser: currentUser,
+        })
     }
 
     render () {
         return (
 
-            this.state.chatRoomId === null ?
+            // this.state.chatRoomId === null ?
             <Card
             title = 'BUDDIES'
             >
@@ -52,19 +56,21 @@ export default class Rooms extends Component {
                     <MessagesDisplay 
                     name = {item}
                     key = {index}
+                    _navigateToChatRoom = {this._navigateToChatRoom}
                     id = {this.state.chatId[index]}
-                    changeChatRoom = {this.changeChatRoom}
+                    currentUser= {this.state.currentUser}
                     />
                 ): <Text></Text>}
             </ScrollView>
-            </Card>:
-            <ChatRoom
-            partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
-            messages = {this.state.messages}
-            chatRoom = {this.state.chatRoomId}
-            changeChatRoom = {this.changeChatRoom}
-            currentUser = {this.state.currentUser}
-            />            
+            </Card>
+            // :
+            // <ChatRoom
+            // partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
+            // messages = {this.state.messages}
+            // chatRoom = {this.state.chatRoomId}
+            // changeChatRoom = {this.changeChatRoom}
+            // currentUser = {this.state.currentUser}
+            // />            
         )
     }
 }

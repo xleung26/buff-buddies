@@ -11,7 +11,8 @@ export default class MessagesDisplay extends Component {
     }
 
     render () {
-      let chatRoom = this.props.id
+      let {id, name, currentUser} = this.props
+      console.log(id, name, currentUser)
       return (
         <View
         style ={[styles.card]}
@@ -25,7 +26,7 @@ export default class MessagesDisplay extends Component {
             size='medium'
             />
             <Button 
-            onPress={() => {this.props.changeChatRoom(chatRoom)}} 
+            onPress={() => {this.props._navigateToChatRoom(id, name, currentUser)}} 
             title = {`   ${this.props.name}`}
             color='#841584'
             />
