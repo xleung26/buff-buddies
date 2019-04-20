@@ -89,13 +89,10 @@ export default class ChatRoom extends Component {
     }
 
     render () {
-        let adjKeyboard = {bottom: 0}
-
-        let adjMessageBox = {height: screen_height * .66}       
+        let adjMessageBox = {height: screen_height * .75}       
 
         if (this.state.keyboard) {
-            adjKeyboard.bottom = 15
-            adjMessageBox.height = screen_height * .35
+            adjMessageBox.height = screen_height * .395
         }
         const { navigation } = this.props;
         const currentUser = navigation.getParam('currentUser', 'N/A')
@@ -166,7 +163,7 @@ export default class ChatRoom extends Component {
                 <Text
                 >{`\n\n\n`}</Text>
                 <View
-                style = {[styles.submissionContainer, adjKeyboard]} 
+                style = {[styles.submissionContainer]} 
                 keyboardShouldPersistTaps='handled'
                 keyboardDismissMode='on-drag'
                 >
@@ -254,7 +251,6 @@ const styles = StyleSheet.create({
     },
 
     messageContainer: {
-        height: screen_height * .66,
         width: screen_width,
         marginLeft: 5,
         marginRight: 5,
@@ -304,7 +300,8 @@ const styles = StyleSheet.create({
     },
 
     submit: {
-        alignSelf: 'center',
+        // alignSelf: 'center',
         fontSize: 10,
+        paddingBottom: 30
     }
 })
