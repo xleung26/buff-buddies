@@ -12,7 +12,6 @@ export default class MessagesDisplay extends Component {
 
     render () {
       let {id, name, currentUser} = this.props
-      console.log(id, name, currentUser)
       return (
         <View
         style ={[styles.card]}

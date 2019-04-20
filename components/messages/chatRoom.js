@@ -9,7 +9,6 @@ import {
     ScrollView,
     Keyboard
 } from 'react-native';
-import DisplayProfile from './buddyProfile.js'
 import db from '../../firebase/chatDB.js';
 import {Avatar} from 'react-native-elements';
 
@@ -17,21 +16,23 @@ const screen_height = Dimensions.get('window').height;
 const screen_width = Dimensions.get('window').width;
 
 export default class ChatRoom extends Component {
-    // static navigationOptions = {
-    //     title: this.props.partner
-    // }
 
     static navigationOptions = ({navigation}) => {
-        const { params } = navigation.state;
-
+        const partner = navigation.getParam('partner', 'N/A')
         return {
-            title: (
+            headerTitle: (
                 <Button
-                title = {params.partner}
-                onPress = {}
+                title = {partner}
+                onPress = {() =>
+                    {
+                    navigation.navigate("BuddyProfile", {
+                        buddy: partner
+                    })}
+                }
                 />
             )
         }
+    
     }
 
     constructor(props){
@@ -46,7 +47,6 @@ export default class ChatRoom extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this._keyboardWillShow = this._keyboardWillShow.bind(this);
         this._keyboardWillHide = this._keyboardWillHide.bind(this);
-        this.handleBuddyProfile = this.handleBuddyProfile.bind(this);
     }
 
     componentDidMount () {
@@ -78,10 +78,6 @@ export default class ChatRoom extends Component {
           })
     }
 
-    handleBuddyProfile (value) {
-        this.setState({ buddy: value })
-    }
-
     handleSubmit () {
         const { navigation } = this.props;
         const currentUser = navigation.getParam('currentUser', 'N/A')
@@ -102,12 +98,10 @@ export default class ChatRoom extends Component {
             adjMessageBox.height = screen_height * .35
         }
         const { navigation } = this.props;
-        const partner = navigation.getParam('partner', 'N/A')
         const currentUser = navigation.getParam('currentUser', 'N/A')
 
         return (
 
-            // this.state.buddy === null?
             <View
             style ={[styles.bigContainer]}
             scrollEnabled={false}  
@@ -115,16 +109,6 @@ export default class ChatRoom extends Component {
                 <View
                 style = {[styles.topContainter]}
                 >
-                {/* <Button
-                onPress = {() => this.props.changeChatRoom(null)} 
-                title = {`back`}
-                style = {[styles.backButton]}
-                >
-                </Button> */}
-                {/* <Text
-                style = {[styles.partner]}
-                // onPress = {() => this.handleBuddyProfile(this.props.partner)}
-                >{partner}</Text> */}
                 </View>
                 <View
                 style ={[styles.messageContainer, adjMessageBox]}           
@@ -199,12 +183,6 @@ export default class ChatRoom extends Component {
                     />
                 </View>
             </View> 
-            // :
-            
-            // <DisplayProfile 
-            // buddy= {this.state.buddy}
-            // handleBuddyProfile = {this.handleBuddyProfile}
-            // />
         )
     }
 }

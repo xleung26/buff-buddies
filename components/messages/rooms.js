@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
 import MessagesDisplay from './messagesDisplay.js';
 import db from '../../firebase/chatDB.js'
-import ChatRoom from './chatRoom.js';
 import {Card} from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -14,7 +13,6 @@ export default class Rooms extends Component {
             currentUser: 'aqilthanawala',
             chatId: [],
             users: [],
-            // chatRoomId: null
         }
 
         this.changeChatRoom = this.changeChatRoom.bind(this);
@@ -36,7 +34,7 @@ export default class Rooms extends Component {
         this.setState({chatRoomId: value})
     }
 
-    _navigateToChatRoom = (id, name, currentUser) => {
+    _navigateToChatRoom (id, name, currentUser) {
         this.props.navigation.navigate("ChatRoom", {
             partner: name,
             chatId: id,
@@ -46,8 +44,6 @@ export default class Rooms extends Component {
 
     render () {
         return (
-
-            // this.state.chatRoomId === null ?
             <Card
             title = 'BUDDIES'
             >
@@ -63,14 +59,6 @@ export default class Rooms extends Component {
                 ): <Text></Text>}
             </ScrollView>
             </Card>
-            // :
-            // <ChatRoom
-            // partner = {this.state.users[this.state.chatId.indexOf(this.state.chatRoomId)]}
-            // messages = {this.state.messages}
-            // chatRoom = {this.state.chatRoomId}
-            // changeChatRoom = {this.changeChatRoom}
-            // currentUser = {this.state.currentUser}
-            // />            
         )
     }
 }

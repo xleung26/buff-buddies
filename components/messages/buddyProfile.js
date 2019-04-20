@@ -58,7 +58,9 @@ class DisplayProfile extends React.Component {
   };
 
   componentDidMount() {
-    getFromDatabase(this.props.buddy, this.getProfile);
+    const { navigation } = this.props;
+    const partner = navigation.getParam('buddy', 'N/A')
+    getFromDatabase(partner, this.getProfile);
   }
 
   render() {
@@ -67,11 +69,6 @@ class DisplayProfile extends React.Component {
         style = {{width: screen_width, height: screen_height}}
         >
           <View style={styles.container}>
-          <Button
-                onPress = {() => this.props.handleBuddyProfile(null)} 
-                title = {`back`}
-            >
-            </Button>
             <Avatar
               rounded
               size="xlarge"
